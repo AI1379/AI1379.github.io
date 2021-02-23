@@ -1,0 +1,680 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Listener1379">
+  <meta name="keywords" content="">
+  <title>AES加密(2)：GF(256)域 - Listener 1379&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/atom-one-dark.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/ccss/scrollbar.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.listener1379.top","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":true,"baidu":"a178668034ca2936157fc2bfe631059f","google":"UA-146814282-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Listener 1379's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 90vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Listener1379's World</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/post.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="AES加密(2)：GF(256)域">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-03-31 09:49" pubdate>
+        2020年3月31日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.8k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      24
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">AES加密(2)：GF(256)域</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：5 个月前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>GF(256)域是一个有限域，在密码学中非常常用</p>
+<span id="more"></span>
+
+<h1 id="什么是有限域-伽罗瓦域-Galois-Field"><a href="#什么是有限域-伽罗瓦域-Galois-Field" class="headerlink" title="什么是有限域/伽罗瓦域(Galois Field)?"></a>什么是有限域/伽罗瓦域(Galois Field)?</h1><p>顾名思义，有限域就是<strong>含有有限个元素的域</strong>。</p>
+<p>既然是含有有限个元素的域，那么关键点就在于<strong>有限</strong>和<strong>域</strong>两个概念。</p>
+<p>首先我们看一下域的定义(来自<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%9F%9F_(%E6%95%B8%E5%AD%B8)">维基百科</a>):</p>
+<blockquote>
+<p>在抽象代数中，域(Field)是一种可以进行加，减，乘，除（除了除以加法单位元“0”）运算的代数结构。域的概念是数域以及四则运算的推广。</p>
+</blockquote>
+<p>在这里加法和乘法并不是我们所熟悉的加法和乘法。我们把这个域记作$F$，其中加法和乘法满足以下几种特性：</p>
+<p>$$<br>\begin{align}<br>&amp;(1)\qquad\forall a,b\in F,\ a+b\in F,\ a\cdot b\in F \<br>&amp;(2)\qquad\forall a,b\in F,\ a+b=b+a,\ a\cdot b=b\cdot a \<br>&amp;(3)\qquad\forall a,b,c\in F,\ (a+b)+c=a+(b+c),\ (a\cdot b)\cdot c=a\cdot (b\cdot c) \<br>&amp;(4)\qquad\forall a,b,c\in F,\ a\cdot (b+c)=a\cdot b+a\cdot c \<br>&amp;(5)\qquad\exists 0,1\in F,使\forall a\in F,\ a+0=a,\ a\cdot 1=a \<br>&amp;(6)\qquad\forall a\in F,a\not=,\exists -a,a^{-1}使a+(-a)=0,a\cdot a^{-1}=1<br>\end{align}<br>$$</p>
+<p>这其中(1)描述了加法与乘法的封闭性，(2),(3),(4)则是我们所熟悉的交换律、结合律和分配律，而(4),(5)分别是对单位元与逆元的定义。</p>
+<p>看到这，我们可以很容易的发现：实数集就是一个满足域的定义的集合。确实，域的概念就是由数域推广发展而来的。</p>
+<p>但是很显然，实数域并不是一个有限的域。</p>
+<p>那么有限域又是怎么回事呢？</p>
+<p>有限域显而易见也是满足域的定义的一个集合，但是这个集合却是一个有限集。在有限域上定义的加和乘仍然满足封闭性。这看起来不可能，但实际上这样的域是存在的。有限域中元素的个数叫做<strong>阶</strong>，任意有限域的阶必然是一个素数的幂。</p>
+<h1 id="那GF-256-又是什么呢？"><a href="#那GF-256-又是什么呢？" class="headerlink" title="那GF(256)又是什么呢？"></a>那GF(256)又是什么呢？</h1><p>$GF(256)$，就是阶为256的有限域。因为$2^8=256$，所以这个域是存在的。</p>
+<p>在$GF(256)$中的任意元素都可以表示成以下形式：</p>
+<p>$$<br>b_7x^7+b_6x^6+b_5x^5+b_4x^4+b_3x^3+b_2x^2+b_1x^1+b_0<br>$$</p>
+<p>其中$b_i\in{0,1}$。比如说十六进制数<code>0x57</code>，转换为二进制之后是<code>01010111</code>，就可以表示成以下形式：</p>
+<p>$$<br>x^6+x^4+x^2+x+1<br>$$</p>
+<p>接下来我们来看看$GF(256)$上的运算</p>
+<h2 id="加法"><a href="#加法" class="headerlink" title="加法"></a>加法</h2><p>我们有两个数<code>0x57</code>和<code>0x83</code>，它们都是$GF(256)$的元素。把<code>0x57+0x83</code>用上面所述的方式表达出来，有下面的式子：</p>
+<p>$$<br>(x^6+x^4+x^2+x+1)+(x^7+x+1)=x^7+x^6+x^4+x^2+2x+2<br>$$</p>
+<p>但是由于$b_i\in{0,1}$，所以结果里的每一项的系数都要模2，也就是变为他除以二的余数，得到：</p>
+<p>$$<br>x^7+x^6+x^4+x^2<br>$$</p>
+<p>再将其变回16进制形式得到<code>0xd4</code>。我们把这种运算记作$a\oplus b$。</p>
+<p>注意到<code>0x57 ^ 0x83=0xd4</code>，这里<code>^</code>指异或。所以我们可以知道$\oplus$与异或是同种运算。</p>
+<p>这里看起来有点草率，但这是有道理的。因为异或本质上就是不带进位的二进制加法，而$\oplus$运算也一样，所以这两种确实就是同种运算。</p>
+<h2 id="乘法"><a href="#乘法" class="headerlink" title="乘法"></a>乘法</h2><p>首先我们得到$GF(2^8)$的本原多项式：</p>
+<p>$$<br>m(x)=x^8+x^4+x^3+x+1<br>$$</p>
+<p>由此得到在$GF(256)$上，$x^8=x^4+x^3+x+1$ （在$GF(256)$上加法与减法是同一种运算，这是由于异或运算是自己的逆运算导致的）。</p>
+<p>现在我们有两个数<code>0x57</code>和<code>0x83</code>，我们用多项式形式表示出来：</p>
+<p>$$<br>\begin{align}<br>(x^6+x^4+x^2+x+1)(x^7+x+1)\qquad=\qquad&amp; x^{13}+x^{11}+x^9+x^8+x^7+ \<br>                                       &amp; x^7+x^5+x^3+x^2+x+ \<br>                                       &amp; x^6+x^4+x^2+x+1 \<br>                                =\qquad&amp; x^{13}+x^{11}+x^9+x^8+x^6+x^5+x^4+x^3+1<br>\end{align}<br>$$</p>
+<p>然后：</p>
+<p>$$<br>(x^{13}+x^{11}+x^9+x^8+x^6+x^5+x^4+x^3+1) \bmod (x^8+x^4+x^3+x+1)=x^7+x^6+1<br>$$</p>
+<p>得到最终结果<code>0xc1</code></p>
+<p>可以证明这种运算在$GF(256)$上满足分配律。</p>
+<h2 id="xtime函数"><a href="#xtime函数" class="headerlink" title="xtime函数"></a>xtime函数</h2><p>我们定义函数<code>xtime</code>，其中<code>xtime(a)=a·0x02 </code>，也就是说这个函数的返回值 (或者说是因变量) 是这个函数的参数 (自变量) 在$GF(256)$上与<code>0x02</code>的乘积。</p>
+<p>那这有什么用呢？</p>
+<p>我们又有两个数<code>0x57</code>和<code>0x13</code>，要求他们在$GF(256)$上的积</p>
+<p>首先我们知道：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xtime(0x57)=0xAE</span><br><span class="line">xtime(0xAE)=0x47</span><br><span class="line">xtime(0x47)=0x8E</span><br><span class="line">xtime(0x8E)=0x07</span><br></pre></td></tr></table></figure>
+
+<p>然后我们应用分配律有:</p>
+<p>$$<br>57\cdot 13=57\cdot(01\oplus 02\oplus 10)=57\oplus AE\ \oplus 07<br>$$</p>
+<p>这样可以简化计算。</p>
+<h2 id="GF-256-上的多项式乘法"><a href="#GF-256-上的多项式乘法" class="headerlink" title="GF(256)上的多项式乘法"></a>GF(256)上的多项式乘法</h2><p>我们现在有两个多项式如下：</p>
+<p>$$<br>\begin{align}<br>&amp;a(x)=a_3x^3+a_2x^2+a_1x+a_0\<br>&amp;b(x)=b_3x^3+b_2x^2+b_1x+b_0\<br>\end{align}<br>$$</p>
+<p>接着又有一个多项式$c(x)=a(x)b(x)$，于是有：</p>
+<p>$$<br>\begin{align}<br>c(x)\quad&amp;=\quad c_6x^6+c_5x^5+c_4x^4+c_3x^3+x_2x^2+c_1x+c_0 \<br>c_0 \quad&amp;=\quad a_0\cdot b_0 \<br>c_1 \quad&amp;=\quad a_1\cdot b_0\oplus a_0\cdot b_1 \<br>c_2 \quad&amp;=\quad a_2\cdot b_0\oplus a_1\cdot b_1\oplus a_0\cdot b_2 \<br>c_3 \quad&amp;=\quad a_3\cdot b_0\oplus a_2\cdot b_1\oplus a_1\cdot b_2 \oplus a_0\cdot b_3\<br>c_4 \quad&amp;=\quad a_3\cdot b_2\oplus a_2\cdot b_2\oplus a_1\cdot b_3 \<br>c_5 \quad&amp;=\quad a_3\cdot b_2\oplus a_2\cdot b_3 \<br>c_6 \quad&amp;=\quad a_3\cdot b_3<br>\end{align}<br>$$</p>
+<p>我们再定义一个多项式 (这个多项式也是$GF(16)$上的本原多项式) ：</p>
+<p>$$<br>M(x)=x^4+1<br>$$</p>
+<p>将$c(x)$模去$M(x)$，得到多项式$d(x)$：</p>
+<p>$$<br>\begin{align}<br>d(x)\quad&amp;=\quad d_3x^3+d_2x^2+d_1x+d_0 \<br>d_0 \quad&amp;=\quad a_0\cdot b_0\oplus a_3\cdot b_1\oplus a_2\cdot b_2\oplus a_1\cdot b_3\<br>d_0 \quad&amp;=\quad a_1\cdot b_0\oplus a_0\cdot b_1\oplus a_3\cdot b_2\oplus a_2\cdot b_3\<br>d_0 \quad&amp;=\quad a_2\cdot b_0\oplus a_1\cdot b_1\oplus a_0\cdot b_2\oplus a_3\cdot b_3\<br>d_0 \quad&amp;=\quad a_3\cdot b_0\oplus a_2\cdot b_1\oplus a_1\cdot b_2\oplus a_0\cdot b_3\<br>\end{align}<br>$$</p>
+<p>同时也可以写成：</p>
+<p>$$<br>\left[<br>\begin{array}{c}<br>d_0\d_1\d_2\d_3<br>\end{array}<br>\right]=<br>\left[<br>\begin{array}{cccc}<br>a_0\quad a_3\quad a_2 \quad a_1\<br>a_1\quad a_0\quad a_3 \quad a_2\<br>a_2\quad a_1\quad a_0 \quad a_3\<br>a_3\quad a_2\quad a_1 \quad a_0<br>\end{array}<br>\right]<br>\left[<br>\begin{array}{c}<br>b_0\b_1\b_2\b_3<br>\end{array}<br>\right]<br>$$</p>
+<p>我们把这种运算记作$\otimes$，即$a(x)\otimes b(x)=d(x)$</p>
+<p>现在我们设$c(x)=x\otimes b(x)$，那么我们有：</p>
+<p>$$<br>b(x)=b_3x^3+b_2x^2+b_1x+b_0\<br>c(x)=b_2x^3+b_1x^2+b_0x+b_3\<br>$$</p>
+<p>把他们转换为二进制形式，可以看到$c$就是将$b$左环移一位得到的结果，也就是说左环移就是在$GF(256)$上乘以<code>0x01</code>。</p>
+<h1 id="GF-256-有什么用？"><a href="#GF-256-有什么用？" class="headerlink" title="GF(256)有什么用？"></a>GF(256)有什么用？</h1><p>$GF(256)$上的四则运算是AES加密算法的数学基础，在密码学中有广泛应用。</p>
+<hr>
+<blockquote>
+<p>参考资料：</p>
+<p><a target="_blank" rel="noopener" href="https://csrc.nist.gov/csrc/media/projects/cryptographic-standards-and-guidelines/documents/aes-development/rijndael-ammended.pdf">The Rijndeal Block Cipher</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%9C%89%E9%99%90%E5%9F%9F">维基百科-有限域</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%9F%9F_(%E6%95%B8%E5%AD%B8)">维基百科-域</a></p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Cryptography/">Cryptography</a>
+                    
+                      <a class="hover-with-bg" href="/categories/Cryptography/Math/">Math</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E6%95%B0%E5%AD%A6/">数学</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Cryptography/Symmetric/aes-mode-padding/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">AES加密(3)：AES加密模式与填充</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Cryptography/Symmetric/aes-encryption/">
+                        <span class="hidden-mobile">AES加密(1)：基本AES算法</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "daFP3gpJrLX9NWoNAGQyKgeK-gzGzoHsz",
+          app_key: "u48q2JQx16KrqQGwqboPRD0O",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: false,
+          serverURLs: "https://dafp3gpj.lc-cn-n1-shared.com",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?a178668034ca2936157fc2bfe631059f";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'UA-146814282-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+</html>

@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Listener1379">
+  <meta name="keywords" content="">
+  <title>AES加密(3)：AES加密模式与填充 - Listener 1379&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/atom-one-dark.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/ccss/scrollbar.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"www.listener1379.top","root":"/","version":"1.8.7","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":"#"},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":true,"baidu":"a178668034ca2936157fc2bfe631059f","google":"UA-146814282-1","gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="Listener 1379's Blog" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 90vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Listener1379's World</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                友链
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/post.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="AES加密(3)：AES加密模式与填充">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-04-06 09:26" pubdate>
+        2020年4月6日 上午
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      22
+       分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- 不蒜子统计文章PV -->
+      <span id="busuanzi_container_page_pv" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="busuanzi_value_page_pv"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+            <div class="scroll-down-bar">
+              <i class="iconfont icon-arrowdown"></i>
+            </div>
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">AES加密(3)：AES加密模式与填充</h1>
+            
+              <p class="note note-info">
+                
+                  本文最后更新于：5 个月前
+                
+              </p>
+            
+            <div class="markdown-body">
+              <p>AES有多种加密方式和填充方式。</p>
+<span id="more"></span>
+
+<h1 id="加密方式"><a href="#加密方式" class="headerlink" title="加密方式"></a>加密方式</h1><p>分组密码加密方式主要有7种：ECB，CBC，CFB，OFB和CTR，这五种方式将在下面一一讲解。</p>
+<h2 id="0-初始化向量-IV"><a href="#0-初始化向量-IV" class="headerlink" title="0. 初始化向量 / IV"></a>0. 初始化向量 / IV</h2><p>在讲加密模式之前首先得要了解一个概念：<strong>初始化向量 (IV)</strong></p>
+<p>在除ECB以外的所有加密方式中，都需要用到IV对加密结果进行随机化。在使用同一种加密同一个密钥时不应该使用相同的IV，否则会失去一定甚至全部的安全性。如果到这里还不明白的话没关系，后面还会继续讲到。</p>
+<h2 id="1-电子密码本-ECB"><a href="#1-电子密码本-ECB" class="headerlink" title="1. 电子密码本 / ECB"></a>1. 电子密码本 / ECB</h2><p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194032.png" srcset="/img/loading.gif"></p>
+<p>这里$CIPH$指AES加密算法，$CIPH^{-1}$指AES解密算法。</p>
+<p>这个很好理解：将明文简单的按照<code>128bit</code>为一个分块进行切割，把每个分块分别进行AES加密，然后再将得到的密文简单的拼接一下即可。</p>
+<p>注意到AES加密只能加密<code>128bit</code>的分块，那问题就产生了：<strong>如果明文的长度不是128bit的倍数，就会存在一个分块不足128bit，那如何对这个分块进行加密？</strong></p>
+<p>别慌，你想到的问题别人早就想到了。为了解决这个问题，我们发明了一种叫做<strong>填充</strong>的东西，这将会在后面具体讲解。<strong>OFB和CTR不需要填充！</strong></p>
+<p>ECB模式有一个显著的安全问题：如果使用相同的密钥，那么相同的明文块就会生成相同的密文块，不能很好的隐藏数据模式。这听起来没什么大事，但事实上这对数据安全是一个很大的威胁，下面这张图很明显的体现出了这个问题：</p>
+<p><img src="https://raw.github.cnpmjs.org/AI1379/imgrepo/master/blogimg/20200407105903.png" srcset="/img/loading.gif"></p>
+<p>因此，在密码协议中不建议使用ECB模式。</p>
+<h2 id="2-密码块链接-CBC"><a href="#2-密码块链接-CBC" class="headerlink" title="2. 密码块链接 / CBC"></a>2. 密码块链接 / CBC</h2><p>在CBC中，每个明文块要先与前一个密文块进行异或后再加密，每个密文块都依赖于前面的所有明文块。</p>
+<p>那么问题又来了：第一个明文块怎么办？</p>
+<p>这个时候就要用到IV了。在CBC中，IV先与第一个明文块进行异或，得到第一个明文块，然后再进行后续的加密。详见下图：</p>
+<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194123.png" srcset="/img/loading.gif"></p>
+<p>这个方法看起来很不错，但有一个缺点：加密过程是串行的，不能并行化，速度比较慢，但是解密可以并行。另外，如果密文的某一位被修改了，只会使这个密文块所对应的明文块完全改变并且改变下一个明文块的对应位，安全性仍然有一定的欠缺。</p>
+<h2 id="3-密文反馈-CFB"><a href="#3-密文反馈-CFB" class="headerlink" title="3. 密文反馈 / CFB"></a>3. 密文反馈 / CFB</h2><p>CFB的加密跟解密过程几乎完全相同，<strong>注意它在解密过程中使用的是AES加密而不是AES解密</strong></p>
+<p>接着我们细细来看下它的过程：</p>
+<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194320.png" srcset="/img/loading.gif"></p>
+<p>CFB模式可以说是5个模式里最为特殊的一个，<strong>它不仅使用了数据块，还另外引入了一个它所独有的“数据段”的概念</strong>。在其他的加密方式中，明文和密文都是以数据块进行“打包”来加密的，而在CFB中却是以“数据段”为单位进行操作。</p>
+<p>我们来细细看看它的过程：</p>
+<p>首先是将输入的IV作为第一个输入块进行AES加密，得到第一个输出块<code>OUTPUT BLOCK1</code>。仔细看图，我们发现，<strong>在这个输出块中，只取了它的前s bit的数据与第一个明文段进行异或操作</strong>。因此我们可以知道：<strong>数据段的长度一定会小于等于数据块的长度</strong>。常用的数据段长度有：<code>1bit</code>, <code>8bits</code> 和<code>128bits</code>，因此CFB也分为CFB1、CFB8和CFB128，再分别跟三种AES算法组合，CFB加密总共有9种。</p>
+<p>我们继续往下看，在<code>OUTPUT BLOCK1</code>中只取了前<code>s bits</code>与第一个明文段进行异或得到了第一个密文段，接着第一个密文段变成了第二个加密块的输入块的后<code>S bits</code>，那么问题来了：<strong>第二个块和后面的所有块的前<code>(b-s)bits</code>是从哪里来的？</strong></p>
+<p>我们注意到，在前一个加密块得到的密文块中，舍弃掉了后<code>(b-s)bits</code>，**而这<code>(b-s)bits</code>就变成了后一个加密块的输入中的前<code>(b-s)bits</code>**。</p>
+<p>接下来又有一个十分反人类的问题：为什么在CFB的解密过程中使用的是加密算法而非解密算法？</p>
+<p>这个问题看起来十分反常识，但实际上很好解释：密文段是由明文段与另一端信息进行异或得到的，那么也得要由原来的密文段异或上同样的一段信息才可以还原原来的明文段，而原来的那一段信息是由AES加密得到的，那么在解密过程中也要同样的进行加密才能算出这段内容以进行解密。</p>
+<h2 id="4-输出反馈-OFB"><a href="#4-输出反馈-OFB" class="headerlink" title="4. 输出反馈 / OFB"></a>4. 输出反馈 / OFB</h2><p>这个很简单，跟CFB128很相似，不同的是它是直接把输出块作为下一个块加密的输入块，具体看过程：</p>
+<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194402.png" srcset="/img/loading.gif"></p>
+<h2 id="5-计数器模式-CTR"><a href="#5-计数器模式-CTR" class="headerlink" title="5. 计数器模式 / CTR"></a>5. 计数器模式 / CTR</h2><p>如下图</p>
+<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194438.png" srcset="/img/loading.gif"></p>
+<p><code>COUNTER</code>是整个CTR模式的核心所在。它是由IV经过一定的规则之后生成的一段数据，长度与数据块的长度相等。接着我们要选定一个数m，这个m是用于确定计数器中累加部分的大小的，通常取块大小的一半，块大小是奇数就四舍五入（当然对于AES并没有这个问题）。初始的计数器<code>COUNTER1</code>是<strong>长度固定的任意一个随机字节序列</strong>，而不是像想象中那样一段随机数后面跟着一段0。</p>
+<p>现在我们假设块大小b=8bits,m=5bits (<strong>这里只是为了便于举例才取8bits和5bits，在AES-CTR中通常是取16bytes和8bytes</strong>)，我们用<code>*</code>表示随机值部分，初始计数器为<code>***11110</code>，那么最终计数器就是这样的：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">***11110</span><br><span class="line">***11111</span><br><span class="line">***00000</span><br><span class="line">***00001</span><br><span class="line">***00002</span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+
+<p>也就是说，随机部分内容不变，其他部分每次+1，如果超出了范围就从0开始重新来。</p>
+<blockquote>
+<p>网上很多都是说计数器是由nonce和counter组成，nonce和counter拼接组成计数器。这种说法其实本质上还是一样的，nonce就相当于这里counter的随机数部分，只不过我这里把两个合在一块讲了。</p>
+</blockquote>
+<h1 id="填充"><a href="#填充" class="headerlink" title="填充"></a>填充</h1><p>填充有六种：NoPadding, PKCS#5, PKCS#7, ISO 10126, ANSI X9.23和ZerosPadding</p>
+<h2 id="NoPadding"><a href="#NoPadding" class="headerlink" title="NoPadding"></a>NoPadding</h2><p>顾名思义，就是不填充。缺点就是只能加密长为128bits倍数的信息，一般不会使用</p>
+<h2 id="PKCS-7-amp-PKCS-5"><a href="#PKCS-7-amp-PKCS-5" class="headerlink" title="PKCS#7 &amp; PKCS#5"></a>PKCS#7 &amp; PKCS#5</h2><p>缺几个字节就填几个缺的字节数。</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">... | DD DD DD DD DD DD DD DD | DD DD DD DD 04 04 04 04 |</span><br></pre></td></tr></table></figure>
+
+<p>注意：如果当前数据已经是128bits的倍数了也得要填充，否则无法解密。</p>
+<p>对于AES来说PKCS5Padding和PKCS7Padding是完全一样的，不同在于PKCS5限定了块大小为8bytes而PKCS7没有限定。因此对于AES来说两者完全相同，但是对于Rijndael就不一样了。AES是Rijndael在块大小为8bytes时的特例，对于使用其他信息块大小的Rijndael算法只能使用PKCS7</p>
+<blockquote>
+<p>2020.6.6更新：PKCS5的块大小是8bytes而AES的块大小是16bytes，所以实际上在AES加密中是不能使用PKCS5的，我们通常说的PKCS5和PKCS7就是同一个东西</p>
+<p>（感谢知乎评论区提醒）</p>
+</blockquote>
+<h2 id="ZerosPadding"><a href="#ZerosPadding" class="headerlink" title="ZerosPadding"></a>ZerosPadding</h2><p>全部填充<code>0x00</code>，无论缺多少全部填充<code>0x00</code>，已经是128bits倍数仍要填充</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">... | DD DD DD DD DD DD DD DD | DD DD DD DD 00 00 00 00 |</span><br></pre></td></tr></table></figure>
+
+<h2 id="ISO-10126"><a href="#ISO-10126" class="headerlink" title="ISO 10126"></a>ISO 10126</h2><p>最后一个字节是填充的字节数（包括最后一字节），其他全部填随机数</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">... | DD DD DD DD DD DD DD DD | DD DD DD DD 81 A6 23 04 |</span><br></pre></td></tr></table></figure>
+
+<h2 id="ANSI-X9-23"><a href="#ANSI-X9-23" class="headerlink" title="ANSI X9.23"></a>ANSI X9.23</h2><p>跟ISO 10126很像，只不过ANSI X9.23其他字节填的都是0而不是随机数</p>
+<p>例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">... | DD DD DD DD DD DD DD DD | DD DD DD DD 00 00 00 04 |</span><br></pre></td></tr></table></figure>
+
+
+
+<hr>
+<blockquote>
+<p>参考资料：</p>
+<p><a target="_blank" rel="noopener" href="https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38a.pdf">NIST Special Publication 800-38A, 2001 Edition</a></p>
+</blockquote>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/Cryptography/">Cryptography</a>
+                    
+                      <a class="hover-with-bg" href="/categories/Cryptography/Symmetric/">Symmetric</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%8A%A0%E5%AF%86/">加密</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/Others/electron-failed/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Electron安装</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/Cryptography/Math/gf256/">
+                        <span class="hidden-mobile">AES加密(2)：GF(256)域</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "daFP3gpJrLX9NWoNAGQyKgeK-gzGzoHsz",
+          app_key: "u48q2JQx16KrqQGwqboPRD0O",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: false,
+          serverURLs: "https://dafp3gpj.lc-cn-n1-shared.com",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- 不蒜子统计PV -->
+        <span id="busuanzi_container_site_pv" style="display: none">
+            总访问量 
+            <span id="busuanzi_value_site_pv"></span>
+             次
+          </span>
+      
+      
+        <!-- 不蒜子统计UV -->
+        <span id="busuanzi_container_site_uv" style="display: none">
+            总访客数 
+            <span id="busuanzi_value_site_uv"></span>
+             人
+          </span>
+      
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      var inputArea = document.querySelector("#local-search-input");
+      inputArea.onclick = function () {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+        this.onclick = null
+      }
+    })()
+  </script>
+
+
+
+
+
+  
+
+  
+    <!-- MathJax -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        options: {
+          renderActions: {
+            findScript: [10, doc => {
+              document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+                const display = !!node.type.match(/; *mode=display/);
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+                const text = document.createTextNode('');
+                node.parentNode.replaceChild(text, node);
+                math.start = { node: text, delim: '', n: 0 };
+                math.end = { node: text, delim: '', n: 0 };
+                doc.math.push(math);
+              });
+            }, '', false],
+            insertedScript: [200, () => {
+              document.querySelectorAll('mjx-container').forEach(node => {
+                let target = node.parentNode;
+                if (target.nodeName.toLowerCase() === 'li') {
+                  target.parentNode.classList.add('has-jax');
+                }
+              });
+            }, '', false]
+          }
+        }
+      };
+    </script>
+
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-svg.js" ></script>
+
+  
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?a178668034ca2936157fc2bfe631059f";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+    <!-- Google Analytics -->
+    <script defer>
+      window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) };
+      ga.l = +new Date;
+      ga('create', 'UA-146814282-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+</html>

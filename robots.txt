@@ -1,0 +1,22 @@
+User-agent: *
+Disallow: /localsearch.xml
+
+User-agent: *
+Disallow: /about
+
+User-agent: *
+Disallow: /archives
+
+User-agent: *
+Disallow: /categories
+
+User-agent: *
+Disallow: /tags
+
+User-agent: *
+Disallow: /links
+
+User-agent: *
+Disallow: /Fiction
+
+Sitemap: http://www.listener1379.top/sitemap.xml
