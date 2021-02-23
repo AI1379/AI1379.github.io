@@ -29,7 +29,17 @@
     
     
       
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/atom-one-dark.min.css" />
+      
+        
+          
+          
+          
+        
+        <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/themes/prism-tomorrow.min.css" />
+      
+      
+        <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/plugins/line-numbers/prism-line-numbers.min.css" />
+      
     
   
 
@@ -53,7 +63,7 @@
 <!-- 自定义样式保持在最底部 -->
 
   
-<link rel="stylesheet" href="/ccss/scrollbar.css">
+<link rel="stylesheet" href="/css/scrollbar.css">
 
 
 
@@ -267,21 +277,111 @@
 <p>首先我们需要一个数组<code>vis[15][15]</code>用来标记棋盘上哪些点不能放皇后。”显而易见”的这是个<code>bool</code>数组(加引号的原因后面再说)</p>
 <p>其次我们还需要一个数组<code>ans[15]</code>来存储当前答案，然后再用sum表示解的总个数</p>
 <p>然后读入，初始化(vis数组全部设为0)，然后就开始DFS:</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> dep)</span> <span class="comment">//dep表示当前所在行</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i, j;</span><br><span class="line">	<span class="keyword">if</span> (dep == n)</span><br><span class="line">	&#123;</span><br><span class="line">		sum++;</span><br><span class="line">		<span class="keyword">if</span> (sum &lt;= <span class="number">3</span>)<span class="comment">//输出</span></span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">			&#123;</span><br><span class="line">				<span class="built_in">cout</span> &lt;&lt; ans[i];</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">memset</span>(ans, <span class="number">0</span>, <span class="keyword">sizeof</span>(ans));</span><br><span class="line">		<span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span>(vis));</span><br><span class="line">		<span class="keyword">return</span>;<span class="comment">//回溯</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!vis[dep][i])</span><br><span class="line">		&#123;</span><br><span class="line">			ans[dep] = i;</span><br><span class="line">			<span class="comment">//标记</span></span><br><span class="line">			<span class="keyword">for</span> (j = dep; j &lt;= n; j++)</span><br><span class="line">				vis[j][i] = <span class="literal">true</span>;</span><br><span class="line">			<span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= n - dep &amp;&amp; j &lt;= i - <span class="number">1</span>; j++)</span><br><span class="line">				vis[dep + j][i - j] = <span class="literal">true</span>;</span><br><span class="line">			<span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= n - dep &amp;&amp; j &lt;= n - i; j++)</span><br><span class="line">				vis[dep + j][i + j] = <span class="literal">true</span>;</span><br><span class="line">			dfs(dep + <span class="number">1</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">dfs</span><span class="token punctuation">(</span><span class="token keyword">int</span> dep<span class="token punctuation">)</span> <span class="token comment">//dep表示当前所在行</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> i<span class="token punctuation">,</span> j<span class="token punctuation">;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>dep <span class="token operator">==</span> n<span class="token punctuation">)</span>
+	<span class="token punctuation">&#123;</span>
+		sum<span class="token operator">++</span><span class="token punctuation">;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>sum <span class="token operator">&lt;=</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token comment">//输出</span>
+		<span class="token punctuation">&#123;</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+			<span class="token punctuation">&#123;</span>
+				cout <span class="token operator">&lt;&lt;</span> ans<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span>
+		<span class="token punctuation">&#125;</span>
+		<span class="token function">memset</span><span class="token punctuation">(</span>ans<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>ans<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token function">memset</span><span class="token punctuation">(</span>vis<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>vis<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">return</span><span class="token punctuation">;</span><span class="token comment">//回溯</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+	<span class="token punctuation">&#123;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>vis<span class="token punctuation">[</span>dep<span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+		<span class="token punctuation">&#123;</span>
+			ans<span class="token punctuation">[</span>dep<span class="token punctuation">]</span> <span class="token operator">=</span> i<span class="token punctuation">;</span>
+			<span class="token comment">//标记</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> dep<span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+				vis<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> dep <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;=</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+				vis<span class="token punctuation">[</span>dep <span class="token operator">+</span> j<span class="token punctuation">]</span><span class="token punctuation">[</span>i <span class="token operator">-</span> j<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> dep <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> i<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+				vis<span class="token punctuation">[</span>dep <span class="token operator">+</span> j<span class="token punctuation">]</span><span class="token punctuation">[</span>i <span class="token operator">+</span> j<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+			<span class="token function">dfs</span><span class="token punctuation">(</span>dep <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div>
 <p><strong>别抄这段代码！</strong><br><strong>它是错的！！！</strong></p>
 <p>那我们来看看哪里错了。</p>
 <p>首先我们发现第一个if语句应该放到循环里面的if语句里面并且去掉<code>return;</code>，否则可能会漏解。</p>
 <p>其次两个<code>memset</code>也是不对的。因为我们答案在存入<code>ans</code>数组的时候是会覆盖原有数据的，所以<code>memset(ans,0,sizeof(ans));</code>一句可以直接删去，回溯查找下一个分支的时候直接覆盖存储，但把<code>vis</code>数组恢复到当前状态的前一个状态有点麻烦。</p>
 <p>首先很容易就可以想到，可以将<code>memset(vis,0,sizeof(vis))</code>一句改为如下代码:</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (j = dep; j &lt;= n; j++)</span><br><span class="line">	vis[j][i] = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= n - dep &amp;&amp; j &lt;= i - <span class="number">1</span>; j++)</span><br><span class="line">	vis[dep + j][i - j] = <span class="literal">false</span>;</span><br><span class="line"><span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= n - dep &amp;&amp; j &lt;= n - i; j++)</span><br><span class="line">	vis[dep + j][i + j] = <span class="literal">false</span>;</span><br></pre></td></tr></table></figure>
+<div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> dep<span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+	vis<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> dep <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;=</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+	vis<span class="token punctuation">[</span>dep <span class="token operator">+</span> j<span class="token punctuation">]</span><span class="token punctuation">[</span>i <span class="token operator">-</span> j<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> dep <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> i<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+	vis<span class="token punctuation">[</span>dep <span class="token operator">+</span> j<span class="token punctuation">]</span><span class="token punctuation">[</span>i <span class="token operator">+</span> j<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div>
 <p>好像可以！</p>
 <p>但如果细想的话还是不行，因为当你这么赋值了之后，一些原来的数据就被破坏掉了。</p>
 <p>就比如说我们在6*6的棋盘中，点(1,3)上和点(5,2)上各有一个皇后。那么我们看一看(6,3)这个点：显而易见的在(1,3)的皇后可以威胁到(6,3)这个点，但当我们回溯到(5,2)时就会把(6,3)的这个值设为<code>false</code>，即这个点是安全的，但实际上不是。</p>
 <p>那怎么办呢？我们可以把<code>vis</code>定义为一个三维<code>bool</code>数组来存储当前情况下每多放一个皇后后棋盘上的情况，但这样实现起来太复杂了而且容易错。</p>
 <p>所以怎么解决这个问题呢？问题出在之前的”显而易见”上。</p>
 <p>如果把<code>vis</code>定义为一个int数组来表示能威胁到这个点的皇后的个数，那么这事就好办了：搜索时每多放一个皇后把新增的格子++，回溯的时候- -就行了。同时因为我们是一行一行往下搜索的，所以横排的可以不用处理，其他三个方向只要从当前位置往下走就行了，可以略微优化一下。</p>
-<p>因此完整代码如下</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">int</span> ans[<span class="number">15</span>];</span><br><span class="line"><span class="keyword">int</span> vis[<span class="number">15</span>][<span class="number">15</span>];</span><br><span class="line"><span class="keyword">int</span> n;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> sum = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> dep)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i, j;</span><br><span class="line">	<span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (!vis[dep][i])</span><br><span class="line">		&#123;</span><br><span class="line">			ans[dep] = i;</span><br><span class="line">			<span class="keyword">for</span> (j = dep; j &lt;= n; j++)</span><br><span class="line">				vis[j][i]++;</span><br><span class="line">			<span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= n - dep &amp;&amp; j &lt;= i - <span class="number">1</span>; j++)</span><br><span class="line">				vis[dep + j][i - j]++;</span><br><span class="line">			<span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= n - dep &amp;&amp; j &lt;= n - i; j++)</span><br><span class="line">				vis[dep + j][i + j]++;</span><br><span class="line">			<span class="keyword">if</span> (dep == n)</span><br><span class="line">			&#123;</span><br><span class="line">				sum++;</span><br><span class="line">				<span class="keyword">if</span> (sum &lt;= <span class="number">3</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					<span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= n; j++)</span><br><span class="line">					&#123;</span><br><span class="line">						<span class="built_in">cout</span> &lt;&lt; ans[j] &lt;&lt; <span class="string">&#x27; &#x27;</span>;</span><br><span class="line">					&#125;</span><br><span class="line">					<span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">if</span> (dep &lt; n)</span><br><span class="line">				dfs(dep + <span class="number">1</span>);</span><br><span class="line">			<span class="keyword">for</span> (j = dep; j &lt;= n; j++)</span><br><span class="line">				vis[j][i]--;</span><br><span class="line">			<span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= n - dep &amp;&amp; j &lt;= i - <span class="number">1</span>; j++)</span><br><span class="line">				vis[dep + j][i - j]--;</span><br><span class="line">			<span class="keyword">for</span> (j = <span class="number">1</span>; j &lt;= n - dep &amp;&amp; j &lt;= n - i; j++)</span><br><span class="line">				vis[dep + j][i + j]--;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="built_in">cin</span> &gt;&gt; n;</span><br><span class="line">	<span class="built_in">memset</span>(ans, <span class="number">0</span>, <span class="keyword">sizeof</span>(ans));</span><br><span class="line">	<span class="built_in">memset</span>(vis, <span class="number">0</span>, <span class="keyword">sizeof</span>(vis));</span><br><span class="line">	dfs(<span class="number">1</span>);</span><br><span class="line">	<span class="built_in">cout</span> &lt;&lt; sum;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因此完整代码如下<br><div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
+<span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
+<span class="token keyword">int</span> ans<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> vis<span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">15</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> n<span class="token punctuation">;</span>
+<span class="token keyword">long</span> <span class="token keyword">long</span> sum <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token keyword">void</span> <span class="token function">dfs</span><span class="token punctuation">(</span><span class="token keyword">int</span> dep<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">int</span> i<span class="token punctuation">,</span> j<span class="token punctuation">;</span>
+	<span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+	<span class="token punctuation">&#123;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>vis<span class="token punctuation">[</span>dep<span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">)</span>
+		<span class="token punctuation">&#123;</span>
+			ans<span class="token punctuation">[</span>dep<span class="token punctuation">]</span> <span class="token operator">=</span> i<span class="token punctuation">;</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> dep<span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+				vis<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> dep <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;=</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+				vis<span class="token punctuation">[</span>dep <span class="token operator">+</span> j<span class="token punctuation">]</span><span class="token punctuation">[</span>i <span class="token operator">-</span> j<span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> dep <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> i<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+				vis<span class="token punctuation">[</span>dep <span class="token operator">+</span> j<span class="token punctuation">]</span><span class="token punctuation">[</span>i <span class="token operator">+</span> j<span class="token punctuation">]</span><span class="token operator">++</span><span class="token punctuation">;</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>dep <span class="token operator">==</span> n<span class="token punctuation">)</span>
+			<span class="token punctuation">&#123;</span>
+				sum<span class="token operator">++</span><span class="token punctuation">;</span>
+				<span class="token keyword">if</span> <span class="token punctuation">(</span>sum <span class="token operator">&lt;=</span> <span class="token number">3</span><span class="token punctuation">)</span>
+				<span class="token punctuation">&#123;</span>
+					<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+					<span class="token punctuation">&#123;</span>
+						cout <span class="token operator">&lt;&lt;</span> ans<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">&lt;&lt;</span> <span class="token string">' '</span><span class="token punctuation">;</span>
+					<span class="token punctuation">&#125;</span>
+					cout <span class="token operator">&lt;&lt;</span> endl<span class="token punctuation">;</span>
+				<span class="token punctuation">&#125;</span>
+			<span class="token punctuation">&#125;</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>dep <span class="token operator">&lt;</span> n<span class="token punctuation">)</span>
+				<span class="token function">dfs</span><span class="token punctuation">(</span>dep <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> dep<span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+				vis<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">--</span><span class="token punctuation">;</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> dep <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;=</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+				vis<span class="token punctuation">[</span>dep <span class="token operator">+</span> j<span class="token punctuation">]</span><span class="token punctuation">[</span>i <span class="token operator">-</span> j<span class="token punctuation">]</span><span class="token operator">--</span><span class="token punctuation">;</span>
+			<span class="token keyword">for</span> <span class="token punctuation">(</span>j <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> dep <span class="token operator">&amp;&amp;</span> j <span class="token operator">&lt;=</span> n <span class="token operator">-</span> i<span class="token punctuation">;</span> j<span class="token operator">++</span><span class="token punctuation">)</span>
+				vis<span class="token punctuation">[</span>dep <span class="token operator">+</span> j<span class="token punctuation">]</span><span class="token punctuation">[</span>i <span class="token operator">+</span> j<span class="token punctuation">]</span><span class="token operator">--</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	cin <span class="token operator">>></span> n<span class="token punctuation">;</span>
+	<span class="token function">memset</span><span class="token punctuation">(</span>ans<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>ans<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">memset</span><span class="token punctuation">(</span>vis<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span><span class="token punctuation">(</span>vis<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">dfs</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	cout <span class="token operator">&lt;&lt;</span> sum<span class="token punctuation">;</span>
+	<span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div></p>
+
             </div>
             <hr>
             <div>
@@ -300,9 +400,9 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E9%A2%98%E8%A7%A3/">题解</a>
-                    
                       <a class="hover-with-bg" href="/tags/DFS/">DFS</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E9%A2%98%E8%A7%A3/">题解</a>
                     
                   </div>
                 
@@ -315,15 +415,21 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/Algorithm/DFS/P2347/">
+                      <a href="/Cryptography/Hash/md5/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">洛谷P2347砝码称重题解</span>
+                        <span class="hidden-mobile">MD5算法解析</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/Algorithm/DFS/P2347/">
+                        <span class="hidden-mobile">洛谷P2347砝码称重题解</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
@@ -481,6 +587,8 @@
 
 
 
+  
+    
   
 
 

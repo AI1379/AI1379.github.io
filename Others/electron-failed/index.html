@@ -29,7 +29,17 @@
     
     
       
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/atom-one-dark.min.css" />
+      
+        
+          
+          
+          
+        
+        <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/themes/prism-tomorrow.min.css" />
+      
+      
+        <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/plugins/line-numbers/prism-line-numbers.min.css" />
+      
     
   
 
@@ -53,7 +63,7 @@
 <!-- 自定义样式保持在最底部 -->
 
   
-<link rel="stylesheet" href="/ccss/scrollbar.css">
+<link rel="stylesheet" href="/css/scrollbar.css">
 
 
 
@@ -201,7 +211,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      527 字
+      518 字
     </span>
   
 
@@ -264,7 +274,6 @@
             <div class="markdown-body">
               <p>有关Electron安装的一些事项</p>
 <span id="more"></span>
-
 <p>Electron安装直接使用npm官方的源极其缓慢，因此我们通常都会使用淘宝源，这个时候安装时就要添加选项<code>--registry=https://registry.npm.taobao.org/</code></p>
 <p>然而如果我们这么加了之后还是会卡在<code>install.js</code>的地方，因此我们又要加一个选项<code>--electron-mirror=https://npm.taobao.org/mirrors/electron</code></p>
 <p>于是下载安装的速度就会变得飞快，然后到最后抛出一个404的错误。</p>
@@ -279,8 +288,8 @@
 <p><code>electron</code>提供了一个变量<code>electron-custom-dir</code>来手动选定查找的目录，比如说本来会到源服务器的<code>electron/v8.2.5</code>文件夹查找文件并下载，而如果把<code>electron-custom-dir</code>设定为<code>/8.2.5</code>就不会到原来的<code>electron/v8.2.5</code>查找，而是到<code>electron/8.2.5</code>下去查找。需要注意的是前面的那个<code>/</code>不能漏掉，否则就会跑到<code>electron8.2.5</code>下，显然这是不对的。</p>
 <p>一般情况下这就好了，但是有时候因为玄学原因安装后运行时会提示未完整安装，这个时候可以加上<code>--unsafe-perm=true</code>再试试。如果比较心急的话还可以加上<code>--verbose</code>来查看进度</p>
 <p>因此完整的安装指令如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npm install electron@&lt;version&gt; -D --verbose --unsafe-perm=<span class="literal">true</span> --registry=<span class="string">&quot;https://registry.npm.taobao.org&quot;</span> --electron-mirror=<span class="string">&quot;https://npm.taobao.org/mirrors/electron&quot;</span> --electron-custom-dir=<span class="string">&quot;/&lt;version&gt;&quot;</span></span><br><span class="line"><span class="comment"># 其中&lt;version&gt;替换为你要安装的版本号</span></span><br></pre></td></tr></table></figure>
-
+<div class="code-wrapper"><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">npm</span> <span class="token function">install</span> electron@<span class="token operator">&lt;</span>version<span class="token operator">></span> -D --verbose --unsafe-perm<span class="token operator">=</span>true --registry<span class="token operator">=</span><span class="token string">"https://registry.npm.taobao.org"</span> --electron-mirror<span class="token operator">=</span><span class="token string">"https://npm.taobao.org/mirrors/electron"</span> --electron-custom-dir<span class="token operator">=</span><span class="token string">"/&lt;version>"</span>
+<span class="token comment"># 其中&lt;version>替换为你要安装的版本号</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></div>
 
             </div>
             <hr>
@@ -483,6 +492,8 @@
 
 
 
+  
+    
   
 
 

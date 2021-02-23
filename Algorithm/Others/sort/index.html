@@ -29,7 +29,17 @@
     
     
       
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/atom-one-dark.min.css" />
+      
+        
+          
+          
+          
+        
+        <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/themes/prism-tomorrow.min.css" />
+      
+      
+        <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/plugins/line-numbers/prism-line-numbers.min.css" />
+      
     
   
 
@@ -53,7 +63,7 @@
 <!-- 自定义样式保持在最底部 -->
 
   
-<link rel="stylesheet" href="/ccss/scrollbar.css">
+<link rel="stylesheet" href="/css/scrollbar.css">
 
 
 
@@ -265,14 +275,27 @@
               <p>本文比较散 适合有基础的同学 同时也给自己复习留下一点笔记</p>
 <p><del>几个月不做算法题的后果就是发现自己连快排都不会打了</del></p>
 <span id="more"></span>
-
 <p>说是说关于各种排序，主要的篇幅应该还是会集中在大名鼎鼎的<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F">快速排序</a>上</p>
 <h1 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h1><p>先来插入排序主要是因为它在后面快排的优化里会提到。在冒泡、选择和插入这三种比较简单的算法里插入排序是效率最高的（但时间复杂度仍然是$O(n)$）。同时他也是很经典的一个算法，在《算法导论》最开始第一章（或许是第二章？这里记不太清了）讲算法分析便以之为例，这个之后有空再另写一篇。</p>
 <p>插入排序简单而又直观。</p>
 <p>想象一下洗牌的时候，随手抓了一把牌，我们得要把他们按照顺序排好。一般来说，我们会先在后面没有排过序的那些牌里选一张，然后在前面排过序了的牌里面找，找到应该要把这张牌插入在哪两个之间，把它插入进去。一般为了代码实现方便，都会取没排过序里最靠前的一张。</p>
 <p>插入排序用的就是这个原理。直接贴代码吧。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insertsort</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> right)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, j, key;</span><br><span class="line">    <span class="keyword">for</span> (i = left + <span class="number">1</span>; i &lt;= right; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        key = a[i];</span><br><span class="line">        j = i - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (j &gt;= left &amp;&amp; a[j] &gt; key)</span><br><span class="line">        &#123;</span><br><span class="line">            a[j + <span class="number">1</span>] = a[j];</span><br><span class="line">            j--;</span><br><span class="line">        &#125;</span><br><span class="line">        a[j + <span class="number">1</span>] = key;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">void</span> <span class="token function">insertsort</span><span class="token punctuation">(</span><span class="token keyword">int</span> left<span class="token punctuation">,</span> <span class="token keyword">int</span> right<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> i<span class="token punctuation">,</span> j<span class="token punctuation">,</span> key<span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token operator">=</span> left <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> right<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        key <span class="token operator">=</span> a<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        j <span class="token operator">=</span> i <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>j <span class="token operator">>=</span> left <span class="token operator">&amp;&amp;</span> a<span class="token punctuation">[</span>j<span class="token punctuation">]</span> <span class="token operator">></span> key<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            a<span class="token punctuation">[</span>j <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> a<span class="token punctuation">[</span>j<span class="token punctuation">]</span><span class="token punctuation">;</span>
+            j<span class="token operator">--</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        a<span class="token punctuation">[</span>j <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">]</span> <span class="token operator">=</span> key<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div>
 <p>其中<code>a[]</code>是要排序的数组。后面的代码也是一样，不再注明了。</p>
 <h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><h2 id="朴素算法"><a href="#朴素算法" class="headerlink" title="朴素算法"></a>朴素算法</h2><p><a target="_blank" rel="noopener" href="https://www.luogu.com.cn/problem/P1177">洛谷P1177 【模板】快速排序</a></p>
 <blockquote>
@@ -280,7 +303,7 @@
 </blockquote>
 <p>快排是一个极其经典且优秀的算法，几乎每一种主流的语言都在自己的标准库里写了一套快排的某种实现（或许Python除外，它自带的<code>sort()</code>算法是另一套稳定的算法<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Timsort">Timsort</a>）</p>
 <p>快排是一个典型的分治算法。它将整个序列以某个数为标准分出较小的和较大的两个部分，再将两个部分分别排序，最终使得整个序列被排序。下面是演示动画，来自WikiPedia。</p>
-<p><img src="https://i.loli.net/2021/02/20/gAhxqGSrlw9zcHt.gif" srcset="/img/loading.gif"></p>
+<p><img src="https://i.loli.net/2021/02/20/gAhxqGSrlw9zcHt.gif" srcset="/img/loading.gif" alt></p>
 <p>算法步骤如下：</p>
 <ol>
 <li>取基准值：从整个序列里任取一个数作为基准<code>pivot</code>，在这张图里用红色表示。<strong>这个基准的选取会直接的影响算法效率，如果这个基准没有取好可能会导致快排退化为冒泡排序。</strong>后面对于冒泡排序的一个优化就是改进基准值的选取。</li>
@@ -296,9 +319,17 @@
 </ol>
 <p>下面是两个常见的优化</p>
 <h3 id="三数取中"><a href="#三数取中" class="headerlink" title="三数取中"></a>三数取中</h3><p>实现了前面的第一点，在左、中、右三个数据中取中位数作为<code>pivot</code>，代码如下：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">choosePiovt</span><span class="params">(<span class="keyword">int</span> left, <span class="keyword">int</span> right)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> x = left, y = right, z = (left + right) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">if</span> ((y &lt;= x &amp;&amp; x &lt;= z) || (z &lt;= x &amp;&amp; x &lt;= y))</span><br><span class="line">        <span class="keyword">return</span> x;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((x &lt;= y &amp;&amp; y &lt;= z) || (z &lt;= y &amp;&amp; y &lt;= x))</span><br><span class="line">        <span class="keyword">return</span> y;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((x &lt;= z &amp;&amp; z &lt;= y) || (y &lt;= z &amp;&amp; z &lt;= x))</span><br><span class="line">        <span class="keyword">return</span> z;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="三路快排"><a href="#三路快排" class="headerlink" title="三路快排"></a>三路快排</h3><p>三路快排实现了前面的第三点。它与朴素的快排不同在于它将原序列分成了三部分：**小于<code>pivot</code>，等于<code>pivot</code>和大于<code>pivot</code>**三个部分，从而进行优化。</p>
+<div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token keyword">inline</span> <span class="token keyword">int</span> <span class="token function">choosePiovt</span><span class="token punctuation">(</span><span class="token keyword">int</span> left<span class="token punctuation">,</span> <span class="token keyword">int</span> right<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> x <span class="token operator">=</span> left<span class="token punctuation">,</span> y <span class="token operator">=</span> right<span class="token punctuation">,</span> z <span class="token operator">=</span> <span class="token punctuation">(</span>left <span class="token operator">+</span> right<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token number">2</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>y <span class="token operator">&lt;=</span> x <span class="token operator">&amp;&amp;</span> x <span class="token operator">&lt;=</span> z<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token punctuation">(</span>z <span class="token operator">&lt;=</span> x <span class="token operator">&amp;&amp;</span> x <span class="token operator">&lt;=</span> y<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> x<span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>x <span class="token operator">&lt;=</span> y <span class="token operator">&amp;&amp;</span> y <span class="token operator">&lt;=</span> z<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token punctuation">(</span>z <span class="token operator">&lt;=</span> y <span class="token operator">&amp;&amp;</span> y <span class="token operator">&lt;=</span> x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> y<span class="token punctuation">;</span>
+    <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>x <span class="token operator">&lt;=</span> z <span class="token operator">&amp;&amp;</span> z <span class="token operator">&lt;=</span> y<span class="token punctuation">)</span> <span class="token operator">||</span> <span class="token punctuation">(</span>y <span class="token operator">&lt;=</span> z <span class="token operator">&amp;&amp;</span> z <span class="token operator">&lt;=</span> x<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> z<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div>
+<h3 id="三路快排"><a href="#三路快排" class="headerlink" title="三路快排"></a>三路快排</h3><p>三路快排实现了前面的第三点。它与朴素的快排不同在于它将原序列分成了三部分：<strong>小于<code>pivot</code>，等于<code>pivot</code>和大于<code>pivot</code></strong>三个部分，从而进行优化。</p>
 
             </div>
             <hr>
@@ -497,6 +528,8 @@
 
 
 
+  
+    
   
 
 

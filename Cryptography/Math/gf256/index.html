@@ -29,7 +29,17 @@
     
     
       
-      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/atom-one-dark.min.css" />
+      
+        
+          
+          
+          
+        
+        <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/themes/prism-tomorrow.min.css" />
+      
+      
+        <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/plugins/line-numbers/prism-line-numbers.min.css" />
+      
     
   
 
@@ -53,7 +63,7 @@
 <!-- 自定义样式保持在最底部 -->
 
   
-<link rel="stylesheet" href="/ccss/scrollbar.css">
+<link rel="stylesheet" href="/css/scrollbar.css">
 
 
 
@@ -201,7 +211,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.8k 字
+      1.7k 字
     </span>
   
 
@@ -264,72 +274,121 @@
             <div class="markdown-body">
               <p>GF(256)域是一个有限域，在密码学中非常常用</p>
 <span id="more"></span>
-
 <h1 id="什么是有限域-伽罗瓦域-Galois-Field"><a href="#什么是有限域-伽罗瓦域-Galois-Field" class="headerlink" title="什么是有限域/伽罗瓦域(Galois Field)?"></a>什么是有限域/伽罗瓦域(Galois Field)?</h1><p>顾名思义，有限域就是<strong>含有有限个元素的域</strong>。</p>
 <p>既然是含有有限个元素的域，那么关键点就在于<strong>有限</strong>和<strong>域</strong>两个概念。</p>
-<p>首先我们看一下域的定义(来自<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%9F%9F_(%E6%95%B8%E5%AD%B8)">维基百科</a>):</p>
+<p>首先我们看一下域的定义(来自<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/域_(數學">维基百科</a>)):</p>
 <blockquote>
 <p>在抽象代数中，域(Field)是一种可以进行加，减，乘，除（除了除以加法单位元“0”）运算的代数结构。域的概念是数域以及四则运算的推广。</p>
 </blockquote>
 <p>在这里加法和乘法并不是我们所熟悉的加法和乘法。我们把这个域记作$F$，其中加法和乘法满足以下几种特性：</p>
-<p>$$<br>\begin{align}<br>&amp;(1)\qquad\forall a,b\in F,\ a+b\in F,\ a\cdot b\in F \<br>&amp;(2)\qquad\forall a,b\in F,\ a+b=b+a,\ a\cdot b=b\cdot a \<br>&amp;(3)\qquad\forall a,b,c\in F,\ (a+b)+c=a+(b+c),\ (a\cdot b)\cdot c=a\cdot (b\cdot c) \<br>&amp;(4)\qquad\forall a,b,c\in F,\ a\cdot (b+c)=a\cdot b+a\cdot c \<br>&amp;(5)\qquad\exists 0,1\in F,使\forall a\in F,\ a+0=a,\ a\cdot 1=a \<br>&amp;(6)\qquad\forall a\in F,a\not=,\exists -a,a^{-1}使a+(-a)=0,a\cdot a^{-1}=1<br>\end{align}<br>$$</p>
-<p>这其中(1)描述了加法与乘法的封闭性，(2),(3),(4)则是我们所熟悉的交换律、结合律和分配律，而(4),(5)分别是对单位元与逆元的定义。</p>
+<script type="math/tex; mode=display">
+\begin{align}
+&(1)\qquad\forall a,b\in F,\ a+b\in F,\ a\cdot b\in F \\
+&(2)\qquad\forall a,b\in F,\ a+b=b+a,\ a\cdot b=b\cdot a \\
+&(3)\qquad\forall a,b,c\in F,\ (a+b)+c=a+(b+c),\ (a\cdot b)\cdot c=a\cdot (b\cdot c) \\
+&(4)\qquad\forall a,b,c\in F,\ a\cdot (b+c)=a\cdot b+a\cdot c \\
+&(5)\qquad\exists 0,1\in F,使\forall a\in F,\ a+0=a,\ a\cdot 1=a \\
+&(6)\qquad\forall a\in F,a\not=,\exists -a,a^{-1}使a+(-a)=0,a\cdot a^{-1}=1
+\end{align}</script><p>这其中(1)描述了加法与乘法的封闭性，(2),(3),(4)则是我们所熟悉的交换律、结合律和分配律，而(4),(5)分别是对单位元与逆元的定义。</p>
 <p>看到这，我们可以很容易的发现：实数集就是一个满足域的定义的集合。确实，域的概念就是由数域推广发展而来的。</p>
 <p>但是很显然，实数域并不是一个有限的域。</p>
 <p>那么有限域又是怎么回事呢？</p>
 <p>有限域显而易见也是满足域的定义的一个集合，但是这个集合却是一个有限集。在有限域上定义的加和乘仍然满足封闭性。这看起来不可能，但实际上这样的域是存在的。有限域中元素的个数叫做<strong>阶</strong>，任意有限域的阶必然是一个素数的幂。</p>
 <h1 id="那GF-256-又是什么呢？"><a href="#那GF-256-又是什么呢？" class="headerlink" title="那GF(256)又是什么呢？"></a>那GF(256)又是什么呢？</h1><p>$GF(256)$，就是阶为256的有限域。因为$2^8=256$，所以这个域是存在的。</p>
 <p>在$GF(256)$中的任意元素都可以表示成以下形式：</p>
-<p>$$<br>b_7x^7+b_6x^6+b_5x^5+b_4x^4+b_3x^3+b_2x^2+b_1x^1+b_0<br>$$</p>
-<p>其中$b_i\in{0,1}$。比如说十六进制数<code>0x57</code>，转换为二进制之后是<code>01010111</code>，就可以表示成以下形式：</p>
-<p>$$<br>x^6+x^4+x^2+x+1<br>$$</p>
-<p>接下来我们来看看$GF(256)$上的运算</p>
+<script type="math/tex; mode=display">
+b_7x^7+b_6x^6+b_5x^5+b_4x^4+b_3x^3+b_2x^2+b_1x^1+b_0</script><p>其中$b_i\in{0,1}$。比如说十六进制数<code>0x57</code>，转换为二进制之后是<code>01010111</code>，就可以表示成以下形式：</p>
+<script type="math/tex; mode=display">
+x^6+x^4+x^2+x+1</script><p>接下来我们来看看$GF(256)$上的运算</p>
 <h2 id="加法"><a href="#加法" class="headerlink" title="加法"></a>加法</h2><p>我们有两个数<code>0x57</code>和<code>0x83</code>，它们都是$GF(256)$的元素。把<code>0x57+0x83</code>用上面所述的方式表达出来，有下面的式子：</p>
-<p>$$<br>(x^6+x^4+x^2+x+1)+(x^7+x+1)=x^7+x^6+x^4+x^2+2x+2<br>$$</p>
-<p>但是由于$b_i\in{0,1}$，所以结果里的每一项的系数都要模2，也就是变为他除以二的余数，得到：</p>
-<p>$$<br>x^7+x^6+x^4+x^2<br>$$</p>
-<p>再将其变回16进制形式得到<code>0xd4</code>。我们把这种运算记作$a\oplus b$。</p>
+<script type="math/tex; mode=display">
+(x^6+x^4+x^2+x+1)+(x^7+x+1)=x^7+x^6+x^4+x^2+2x+2</script><p>但是由于$b_i\in{0,1}$，所以结果里的每一项的系数都要模2，也就是变为他除以二的余数，得到：</p>
+<script type="math/tex; mode=display">
+x^7+x^6+x^4+x^2</script><p>再将其变回16进制形式得到<code>0xd4</code>。我们把这种运算记作$a\oplus b$。</p>
 <p>注意到<code>0x57 ^ 0x83=0xd4</code>，这里<code>^</code>指异或。所以我们可以知道$\oplus$与异或是同种运算。</p>
 <p>这里看起来有点草率，但这是有道理的。因为异或本质上就是不带进位的二进制加法，而$\oplus$运算也一样，所以这两种确实就是同种运算。</p>
 <h2 id="乘法"><a href="#乘法" class="headerlink" title="乘法"></a>乘法</h2><p>首先我们得到$GF(2^8)$的本原多项式：</p>
-<p>$$<br>m(x)=x^8+x^4+x^3+x+1<br>$$</p>
-<p>由此得到在$GF(256)$上，$x^8=x^4+x^3+x+1$ （在$GF(256)$上加法与减法是同一种运算，这是由于异或运算是自己的逆运算导致的）。</p>
+<script type="math/tex; mode=display">
+m(x)=x^8+x^4+x^3+x+1</script><p>由此得到在$GF(256)$上，$x^8=x^4+x^3+x+1$ （在$GF(256)$上加法与减法是同一种运算，这是由于异或运算是自己的逆运算导致的）。</p>
 <p>现在我们有两个数<code>0x57</code>和<code>0x83</code>，我们用多项式形式表示出来：</p>
-<p>$$<br>\begin{align}<br>(x^6+x^4+x^2+x+1)(x^7+x+1)\qquad=\qquad&amp; x^{13}+x^{11}+x^9+x^8+x^7+ \<br>                                       &amp; x^7+x^5+x^3+x^2+x+ \<br>                                       &amp; x^6+x^4+x^2+x+1 \<br>                                =\qquad&amp; x^{13}+x^{11}+x^9+x^8+x^6+x^5+x^4+x^3+1<br>\end{align}<br>$$</p>
-<p>然后：</p>
-<p>$$<br>(x^{13}+x^{11}+x^9+x^8+x^6+x^5+x^4+x^3+1) \bmod (x^8+x^4+x^3+x+1)=x^7+x^6+1<br>$$</p>
-<p>得到最终结果<code>0xc1</code></p>
+<script type="math/tex; mode=display">
+\begin{align}
+(x^6+x^4+x^2+x+1)(x^7+x+1)\qquad=\qquad& x^{13}+x^{11}+x^9+x^8+x^7+ \\
+                                       & x^7+x^5+x^3+x^2+x+ \\
+                                       & x^6+x^4+x^2+x+1 \\
+                                =\qquad& x^{13}+x^{11}+x^9+x^8+x^6+x^5+x^4+x^3+1
+\end{align}</script><p>然后：</p>
+<script type="math/tex; mode=display">
+(x^{13}+x^{11}+x^9+x^8+x^6+x^5+x^4+x^3+1) \bmod (x^8+x^4+x^3+x+1)=x^7+x^6+1</script><p>得到最终结果<code>0xc1</code></p>
 <p>可以证明这种运算在$GF(256)$上满足分配律。</p>
-<h2 id="xtime函数"><a href="#xtime函数" class="headerlink" title="xtime函数"></a>xtime函数</h2><p>我们定义函数<code>xtime</code>，其中<code>xtime(a)=a·0x02 </code>，也就是说这个函数的返回值 (或者说是因变量) 是这个函数的参数 (自变量) 在$GF(256)$上与<code>0x02</code>的乘积。</p>
+<h2 id="xtime函数"><a href="#xtime函数" class="headerlink" title="xtime函数"></a>xtime函数</h2><p>我们定义函数<code>xtime</code>，其中<code>xtime(a)=a·0x02</code>，也就是说这个函数的返回值 (或者说是因变量) 是这个函数的参数 (自变量) 在$GF(256)$上与<code>0x02</code>的乘积。</p>
 <p>那这有什么用呢？</p>
 <p>我们又有两个数<code>0x57</code>和<code>0x13</code>，要求他们在$GF(256)$上的积</p>
 <p>首先我们知道：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xtime(0x57)=0xAE</span><br><span class="line">xtime(0xAE)=0x47</span><br><span class="line">xtime(0x47)=0x8E</span><br><span class="line">xtime(0x8E)=0x07</span><br></pre></td></tr></table></figure>
-
+<div class="code-wrapper"><pre class="line-numbers language-plaintext" data-language="plaintext"><code class="language-plaintext">xtime(0x57)&#x3D;0xAE
+xtime(0xAE)&#x3D;0x47
+xtime(0x47)&#x3D;0x8E
+xtime(0x8E)&#x3D;0x07<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></div>
 <p>然后我们应用分配律有:</p>
-<p>$$<br>57\cdot 13=57\cdot(01\oplus 02\oplus 10)=57\oplus AE\ \oplus 07<br>$$</p>
-<p>这样可以简化计算。</p>
+<script type="math/tex; mode=display">
+57\cdot 13=57\cdot(01\oplus 02\oplus 10)=57\oplus AE\ \oplus 07</script><p>这样可以简化计算。</p>
 <h2 id="GF-256-上的多项式乘法"><a href="#GF-256-上的多项式乘法" class="headerlink" title="GF(256)上的多项式乘法"></a>GF(256)上的多项式乘法</h2><p>我们现在有两个多项式如下：</p>
-<p>$$<br>\begin{align}<br>&amp;a(x)=a_3x^3+a_2x^2+a_1x+a_0\<br>&amp;b(x)=b_3x^3+b_2x^2+b_1x+b_0\<br>\end{align}<br>$$</p>
-<p>接着又有一个多项式$c(x)=a(x)b(x)$，于是有：</p>
-<p>$$<br>\begin{align}<br>c(x)\quad&amp;=\quad c_6x^6+c_5x^5+c_4x^4+c_3x^3+x_2x^2+c_1x+c_0 \<br>c_0 \quad&amp;=\quad a_0\cdot b_0 \<br>c_1 \quad&amp;=\quad a_1\cdot b_0\oplus a_0\cdot b_1 \<br>c_2 \quad&amp;=\quad a_2\cdot b_0\oplus a_1\cdot b_1\oplus a_0\cdot b_2 \<br>c_3 \quad&amp;=\quad a_3\cdot b_0\oplus a_2\cdot b_1\oplus a_1\cdot b_2 \oplus a_0\cdot b_3\<br>c_4 \quad&amp;=\quad a_3\cdot b_2\oplus a_2\cdot b_2\oplus a_1\cdot b_3 \<br>c_5 \quad&amp;=\quad a_3\cdot b_2\oplus a_2\cdot b_3 \<br>c_6 \quad&amp;=\quad a_3\cdot b_3<br>\end{align}<br>$$</p>
-<p>我们再定义一个多项式 (这个多项式也是$GF(16)$上的本原多项式) ：</p>
-<p>$$<br>M(x)=x^4+1<br>$$</p>
-<p>将$c(x)$模去$M(x)$，得到多项式$d(x)$：</p>
-<p>$$<br>\begin{align}<br>d(x)\quad&amp;=\quad d_3x^3+d_2x^2+d_1x+d_0 \<br>d_0 \quad&amp;=\quad a_0\cdot b_0\oplus a_3\cdot b_1\oplus a_2\cdot b_2\oplus a_1\cdot b_3\<br>d_0 \quad&amp;=\quad a_1\cdot b_0\oplus a_0\cdot b_1\oplus a_3\cdot b_2\oplus a_2\cdot b_3\<br>d_0 \quad&amp;=\quad a_2\cdot b_0\oplus a_1\cdot b_1\oplus a_0\cdot b_2\oplus a_3\cdot b_3\<br>d_0 \quad&amp;=\quad a_3\cdot b_0\oplus a_2\cdot b_1\oplus a_1\cdot b_2\oplus a_0\cdot b_3\<br>\end{align}<br>$$</p>
-<p>同时也可以写成：</p>
-<p>$$<br>\left[<br>\begin{array}{c}<br>d_0\d_1\d_2\d_3<br>\end{array}<br>\right]=<br>\left[<br>\begin{array}{cccc}<br>a_0\quad a_3\quad a_2 \quad a_1\<br>a_1\quad a_0\quad a_3 \quad a_2\<br>a_2\quad a_1\quad a_0 \quad a_3\<br>a_3\quad a_2\quad a_1 \quad a_0<br>\end{array}<br>\right]<br>\left[<br>\begin{array}{c}<br>b_0\b_1\b_2\b_3<br>\end{array}<br>\right]<br>$$</p>
-<p>我们把这种运算记作$\otimes$，即$a(x)\otimes b(x)=d(x)$</p>
+<script type="math/tex; mode=display">
+\begin{align}
+&a(x)=a_3x^3+a_2x^2+a_1x+a_0\\
+&b(x)=b_3x^3+b_2x^2+b_1x+b_0\\
+\end{align}</script><p>接着又有一个多项式$c(x)=a(x)b(x)$，于是有：</p>
+<script type="math/tex; mode=display">
+\begin{align}
+c(x)\quad&=\quad c_6x^6+c_5x^5+c_4x^4+c_3x^3+x_2x^2+c_1x+c_0 \\
+c_0 \quad&=\quad a_0\cdot b_0 \\
+c_1 \quad&=\quad a_1\cdot b_0\oplus a_0\cdot b_1 \\
+c_2 \quad&=\quad a_2\cdot b_0\oplus a_1\cdot b_1\oplus a_0\cdot b_2 \\
+c_3 \quad&=\quad a_3\cdot b_0\oplus a_2\cdot b_1\oplus a_1\cdot b_2 \oplus a_0\cdot b_3\\
+c_4 \quad&=\quad a_3\cdot b_2\oplus a_2\cdot b_2\oplus a_1\cdot b_3 \\
+c_5 \quad&=\quad a_3\cdot b_2\oplus a_2\cdot b_3 \\
+c_6 \quad&=\quad a_3\cdot b_3
+\end{align}</script><p>我们再定义一个多项式 (这个多项式也是$GF(16)$上的本原多项式) ：</p>
+<script type="math/tex; mode=display">
+M(x)=x^4+1</script><p>将$c(x)$模去$M(x)$，得到多项式$d(x)$：</p>
+<script type="math/tex; mode=display">
+\begin{align}
+d(x)\quad&=\quad d_3x^3+d_2x^2+d_1x+d_0 \\
+d_0 \quad&=\quad a_0\cdot b_0\oplus a_3\cdot b_1\oplus a_2\cdot b_2\oplus a_1\cdot b_3\\
+d_0 \quad&=\quad a_1\cdot b_0\oplus a_0\cdot b_1\oplus a_3\cdot b_2\oplus a_2\cdot b_3\\
+d_0 \quad&=\quad a_2\cdot b_0\oplus a_1\cdot b_1\oplus a_0\cdot b_2\oplus a_3\cdot b_3\\
+d_0 \quad&=\quad a_3\cdot b_0\oplus a_2\cdot b_1\oplus a_1\cdot b_2\oplus a_0\cdot b_3\\
+\end{align}</script><p>同时也可以写成：</p>
+<script type="math/tex; mode=display">
+\left[
+\begin{array}{c}
+d_0\\d_1\\d_2\\d_3
+\end{array}
+\right]=
+\left[
+\begin{array}{cccc}
+a_0\quad a_3\quad a_2 \quad a_1\\
+a_1\quad a_0\quad a_3 \quad a_2\\
+a_2\quad a_1\quad a_0 \quad a_3\\
+a_3\quad a_2\quad a_1 \quad a_0
+\end{array}
+\right]
+\left[
+\begin{array}{c}
+b_0\\b_1\\b_2\\b_3
+\end{array}
+\right]</script><p>我们把这种运算记作$\otimes$，即$a(x)\otimes b(x)=d(x)$</p>
 <p>现在我们设$c(x)=x\otimes b(x)$，那么我们有：</p>
-<p>$$<br>b(x)=b_3x^3+b_2x^2+b_1x+b_0\<br>c(x)=b_2x^3+b_1x^2+b_0x+b_3\<br>$$</p>
-<p>把他们转换为二进制形式，可以看到$c$就是将$b$左环移一位得到的结果，也就是说左环移就是在$GF(256)$上乘以<code>0x01</code>。</p>
+<script type="math/tex; mode=display">
+b(x)=b_3x^3+b_2x^2+b_1x+b_0\\
+c(x)=b_2x^3+b_1x^2+b_0x+b_3\\</script><p>把他们转换为二进制形式，可以看到$c$就是将$b$左环移一位得到的结果，也就是说左环移就是在$GF(256)$上乘以<code>0x01</code>。</p>
 <h1 id="GF-256-有什么用？"><a href="#GF-256-有什么用？" class="headerlink" title="GF(256)有什么用？"></a>GF(256)有什么用？</h1><p>$GF(256)$上的四则运算是AES加密算法的数学基础，在密码学中有广泛应用。</p>
 <hr>
 <blockquote>
 <p>参考资料：</p>
 <p><a target="_blank" rel="noopener" href="https://csrc.nist.gov/csrc/media/projects/cryptographic-standards-and-guidelines/documents/aes-development/rijndael-ammended.pdf">The Rijndeal Block Cipher</a></p>
-<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E6%9C%89%E9%99%90%E5%9F%9F">维基百科-有限域</a></p>
-<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%9F%9F_(%E6%95%B8%E5%AD%B8)">维基百科-域</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/有限域">维基百科-有限域</a></p>
+<p><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/域_(數學">维基百科-域</a>)</p>
 </blockquote>
 
             </div>
@@ -535,6 +594,8 @@
 
 
 
+  
+    
   
 
 
