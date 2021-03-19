@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.listener1379.top/"/>
-  <updated>2021-02-20T02:25:35.680Z</updated>
+  <updated>2021-03-19T11:37:54.966Z</updated>
   <id>http://www.listener1379.top/</id>
   
   <author>
@@ -15,6 +15,55 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>有关一些技术活的计划</title>
+    <link href="http://www.listener1379.top/Plans/plan/"/>
+    <id>http://www.listener1379.top/Plans/plan/</id>
+    <published>2021-03-19T10:19:03.000Z</published>
+    <updated>2021-03-19T11:37:54.966Z</updated>
+    
+    <content type="html"><![CDATA[<p>马上中考完了之后打算做的事情以及相关的一些想法都写在下面了</p><span id="more"></span><h1 id="FroztaleQQBot"><a href="#FroztaleQQBot" class="headerlink" title="FroztaleQQBot"></a>FroztaleQQBot</h1><p>这是一个C++写的QQ机器人 基于Mirai和mirai-cpp。也许会用Qt Core来做。目前看来没这个必要。</p><p>有几点构思大概这样</p><h2 id="插件系统"><a href="#插件系统" class="headerlink" title="插件系统"></a>插件系统</h2><p>每个插件作为一个DLL动态加载，最终目标想着参照Qv2ray，有空的时候翻翻Qv2ray的代码做参考。</p><p>现在的实现思路大致是这样的。首先在核心部分做一个有点像总线的东西，加载到DLL插件的时候就把它对应的元数据加载到这条线上。插件应该是一个抽象类，需要包括一些必要的数据，比如说用一个字符串类存储插件名称和描述，然后还需要用一些方式来描述触发插件行为所对应的时间，还需要对应的处理函数。也许可以通过某些机制让插件开发者自己注册事件，然后在加载插件的时候载入主事件循环。</p><p>另外也许有些核心功能可以用内置插件的形式实现。</p><h2 id="指令系统"><a href="#指令系统" class="headerlink" title="指令系统"></a>指令系统</h2><p>这里指的是群消息指令。</p><p>目前的思路是对于每一条群消息都先匹配一下有没有包括指令前缀，有的话作为一个指令发出一个事件，没有则跳过。这种做法在群比较多的情况下效率会很低，但是似乎并没有办法优化。</p><p>当接收到指令的时候创建一个事件对象，其中应该包括指令名称及其参数。为了方便这里的参数打算使用mirai-cpp所提供的<code>Cyan::iMassage</code>抽象类的子类所构成的一个<code>std::vector</code>来存储。但这里有一个问题是这些东西并不是同一个类型的变量，因此打算使用指针来存，实在不行也可以用<code>std::any</code>。</p><h1 id="一个跨平台的QQ客户端"><a href="#一个跨平台的QQ客户端" class="headerlink" title="一个跨平台的QQ客户端"></a>一个跨平台的QQ客户端</h1><p>打算用electron或者Qt来做。用Qt的好处是可以直接复用FroztaleQQBot的代码，坏处在于有些地方太丑，相比之下Electron的颜值更能让我满意，但是坏处就是得要重新把C++的代码翻译成TypeScript。</p><p>也许可以用C++做一个Node.js库来加载原有的一些DLL来复用。或者也可以在FroztaleBot里实现http api来实现。</p><h1 id="EAer’s-Pub"><a href="#EAer’s-Pub" class="headerlink" title="EAer’s Pub"></a>EAer’s Pub</h1><blockquote><p>就是原来的EALibrary</p></blockquote><p>这个东西暑假必须重新开张。</p><p>两个方案：沿袭原来的WordPress / 用Express或Nest.js重新写</p><h2 id="WordPress方案"><a href="#WordPress方案" class="headerlink" title="WordPress方案"></a>WordPress方案</h2><p>优点：</p><ol><li>较为成熟 可能比纯自建要稳一些 有些安全问题也很好解决</li><li>插件多 方便</li><li>不用写太多代码 快</li></ol><p>缺点：</p><ol><li>不熟悉PHP</li><li>不太好定制</li></ol><h2 id="Node-js方案"><a href="#Node-js方案" class="headerlink" title="Node.js方案"></a>Node.js方案</h2><p>优点：</p><ol><li>纯手写 定制化程度高</li><li>更有可控性</li></ol><p>缺点：</p><ol><li>费时费力 不一定能快速重建</li><li>有些问题不方便及时解决</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;马上中考完了之后打算做的事情以及相关的一些想法都写在下面了&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Plans" scheme="http://www.listener1379.top/categories/Plans/"/>
+    
+    
+      <category term="总结和计划" scheme="http://www.listener1379.top/tags/%E6%80%BB%E7%BB%93%E5%92%8C%E8%AE%A1%E5%88%92/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>在后台运行MCL</title>
+    <link href="http://www.listener1379.top/Mirai/mcl-bkground/"/>
+    <id>http://www.listener1379.top/Mirai/mcl-bkground/</id>
+    <published>2021-03-19T09:15:06.000Z</published>
+    <updated>2021-03-19T10:09:01.563Z</updated>
+    
+    <content type="html"><![CDATA[<p>这几天在做一个QQ机器人，用的是<a href="https://github.com/mamoe/mirai">Mirai</a>和<a href="https://github.com/cyanray/mirai-cpp">mirai-cpp</a>，需要在后台部署Mirai Console，然而主流的screen方案在我的Linux服务器上不知为何行不通，所以写了一个service</p><div class="code-wrapper"><pre class="line-numbers language-text" data-language="text"><code class="language-text">[Unit]Description&#x3D;Mirai Console Loader Systemd[Service]Type&#x3D;simpleWorkingDirectory&#x3D;&lt;这里写mcl目录 一定要绝对目录&gt;ExecStart&#x3D;&lt;这里写运行的文件位置&gt;[Install]Alias&#x3D;Mirai.service<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div><p>放到<code>/usr/lib/systemd/system</code>即可。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;这几天在做一个QQ机器人，用的是&lt;a href=&quot;https://github.com/mamoe/mirai&quot;&gt;Mirai&lt;/a&gt;和&lt;a href=&quot;https://github.com/cyanray/mirai-cpp&quot;&gt;mirai-cpp&lt;/a&gt;，需要在后台部署Mi
+      
+    
+    </summary>
+    
+    
+      <category term="Mirai" scheme="http://www.listener1379.top/categories/Mirai/"/>
+    
+    
+      <category term="Mirai" scheme="http://www.listener1379.top/tags/Mirai/"/>
+    
+  </entry>
   
   <entry>
     <title>有关各种排序</title>
