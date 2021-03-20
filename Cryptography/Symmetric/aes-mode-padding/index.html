@@ -280,22 +280,22 @@
 <h1 id="加密方式"><a href="#加密方式" class="headerlink" title="加密方式"></a>加密方式</h1><p>分组密码加密方式主要有7种：ECB，CBC，CFB，OFB和CTR，这五种方式将在下面一一讲解。</p>
 <h2 id="0-初始化向量-IV"><a href="#0-初始化向量-IV" class="headerlink" title="0. 初始化向量 / IV"></a>0. 初始化向量 / IV</h2><p>在讲加密模式之前首先得要了解一个概念：<strong>初始化向量 (IV)</strong></p>
 <p>在除ECB以外的所有加密方式中，都需要用到IV对加密结果进行随机化。在使用同一种加密同一个密钥时不应该使用相同的IV，否则会失去一定甚至全部的安全性。如果到这里还不明白的话没关系，后面还会继续讲到。</p>
-<h2 id="1-电子密码本-ECB"><a href="#1-电子密码本-ECB" class="headerlink" title="1. 电子密码本 / ECB"></a>1. 电子密码本 / ECB</h2><p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194032.png" srcset="/img/loading.gif" alt></p>
+<h2 id="1-电子密码本-ECB"><a href="#1-电子密码本-ECB" class="headerlink" title="1. 电子密码本 / ECB"></a>1. 电子密码本 / ECB</h2><p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194032.png" srcset="https://cdn.jsdelivr.net/gh/ai1379/ai1379.github.io@master/img/loading.gif" alt></p>
 <p>这里$CIPH$指AES加密算法，$CIPH^{-1}$指AES解密算法。</p>
 <p>这个很好理解：将明文简单的按照<code>128bit</code>为一个分块进行切割，把每个分块分别进行AES加密，然后再将得到的密文简单的拼接一下即可。</p>
 <p>注意到AES加密只能加密<code>128bit</code>的分块，那问题就产生了：<strong>如果明文的长度不是128bit的倍数，就会存在一个分块不足128bit，那如何对这个分块进行加密？</strong></p>
 <p>别慌，你想到的问题别人早就想到了。为了解决这个问题，我们发明了一种叫做<strong>填充</strong>的东西，这将会在后面具体讲解。<strong>OFB和CTR不需要填充！</strong></p>
 <p>ECB模式有一个显著的安全问题：如果使用相同的密钥，那么相同的明文块就会生成相同的密文块，不能很好的隐藏数据模式。这听起来没什么大事，但事实上这对数据安全是一个很大的威胁，下面这张图很明显的体现出了这个问题：</p>
-<p><img src="https://raw.github.cnpmjs.org/AI1379/imgrepo/master/blogimg/20200407105903.png" srcset="/img/loading.gif" alt></p>
+<p><img src="https://raw.github.cnpmjs.org/AI1379/imgrepo/master/blogimg/20200407105903.png" srcset="https://cdn.jsdelivr.net/gh/ai1379/ai1379.github.io@master/img/loading.gif" alt></p>
 <p>因此，在密码协议中不建议使用ECB模式。</p>
 <h2 id="2-密码块链接-CBC"><a href="#2-密码块链接-CBC" class="headerlink" title="2. 密码块链接 / CBC"></a>2. 密码块链接 / CBC</h2><p>在CBC中，每个明文块要先与前一个密文块进行异或后再加密，每个密文块都依赖于前面的所有明文块。</p>
 <p>那么问题又来了：第一个明文块怎么办？</p>
 <p>这个时候就要用到IV了。在CBC中，IV先与第一个明文块进行异或，得到第一个明文块，然后再进行后续的加密。详见下图：</p>
-<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194123.png" srcset="/img/loading.gif" alt></p>
+<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194123.png" srcset="https://cdn.jsdelivr.net/gh/ai1379/ai1379.github.io@master/img/loading.gif" alt></p>
 <p>这个方法看起来很不错，但有一个缺点：加密过程是串行的，不能并行化，速度比较慢，但是解密可以并行。另外，如果密文的某一位被修改了，只会使这个密文块所对应的明文块完全改变并且改变下一个明文块的对应位，安全性仍然有一定的欠缺。</p>
 <h2 id="3-密文反馈-CFB"><a href="#3-密文反馈-CFB" class="headerlink" title="3. 密文反馈 / CFB"></a>3. 密文反馈 / CFB</h2><p>CFB的加密跟解密过程几乎完全相同，<strong>注意它在解密过程中使用的是AES加密而不是AES解密</strong></p>
 <p>接着我们细细来看下它的过程：</p>
-<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194320.png" srcset="/img/loading.gif" alt></p>
+<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194320.png" srcset="https://cdn.jsdelivr.net/gh/ai1379/ai1379.github.io@master/img/loading.gif" alt></p>
 <p>CFB模式可以说是5个模式里最为特殊的一个，<strong>它不仅使用了数据块，还另外引入了一个它所独有的“数据段”的概念</strong>。在其他的加密方式中，明文和密文都是以数据块进行“打包”来加密的，而在CFB中却是以“数据段”为单位进行操作。</p>
 <p>我们来细细看看它的过程：</p>
 <p>首先是将输入的IV作为第一个输入块进行AES加密，得到第一个输出块<code>OUTPUT BLOCK1</code>。仔细看图，我们发现，<strong>在这个输出块中，只取了它的前s bit的数据与第一个明文段进行异或操作</strong>。因此我们可以知道：<strong>数据段的长度一定会小于等于数据块的长度</strong>。常用的数据段长度有：<code>1bit</code>, <code>8bits</code> 和<code>128bits</code>，因此CFB也分为CFB1、CFB8和CFB128，再分别跟三种AES算法组合，CFB加密总共有9种。</p>
@@ -304,9 +304,9 @@
 <p>接下来又有一个十分反人类的问题：为什么在CFB的解密过程中使用的是加密算法而非解密算法？</p>
 <p>这个问题看起来十分反常识，但实际上很好解释：密文段是由明文段与另一端信息进行异或得到的，那么也得要由原来的密文段异或上同样的一段信息才可以还原原来的明文段，而原来的那一段信息是由AES加密得到的，那么在解密过程中也要同样的进行加密才能算出这段内容以进行解密。</p>
 <h2 id="4-输出反馈-OFB"><a href="#4-输出反馈-OFB" class="headerlink" title="4. 输出反馈 / OFB"></a>4. 输出反馈 / OFB</h2><p>这个很简单，跟CFB128很相似，不同的是它是直接把输出块作为下一个块加密的输入块，具体看过程：</p>
-<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194402.png" srcset="/img/loading.gif" alt></p>
+<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194402.png" srcset="https://cdn.jsdelivr.net/gh/ai1379/ai1379.github.io@master/img/loading.gif" alt></p>
 <h2 id="5-计数器模式-CTR"><a href="#5-计数器模式-CTR" class="headerlink" title="5. 计数器模式 / CTR"></a>5. 计数器模式 / CTR</h2><p>如下图</p>
-<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194438.png" srcset="/img/loading.gif" alt></p>
+<p><img src="https://raw.github.cnpmjs.org/AI1379/AI1379.github.io/imgs/imgs/20200523194438.png" srcset="https://cdn.jsdelivr.net/gh/ai1379/ai1379.github.io@master/img/loading.gif" alt></p>
 <p><code>COUNTER</code>是整个CTR模式的核心所在。它是由IV经过一定的规则之后生成的一段数据，长度与数据块的长度相等。接着我们要选定一个数m，这个m是用于确定计数器中累加部分的大小的，通常取块大小的一半，块大小是奇数就四舍五入（当然对于AES并没有这个问题）。初始的计数器<code>COUNTER1</code>是<strong>长度固定的任意一个随机字节序列</strong>，而不是像想象中那样一段随机数后面跟着一段0。</p>
 <p>现在我们假设块大小b=8bits,m=5bits (<strong>这里只是为了便于举例才取8bits和5bits，在AES-CTR中通常是取16bytes和8bytes</strong>)，我们用<code>*</code>表示随机值部分，初始计数器为<code>***11110</code>，那么最终计数器就是这样的：</p>
 <div class="code-wrapper"><pre class="line-numbers language-text" data-language="text"><code class="language-text">***11110
