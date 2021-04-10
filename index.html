@@ -198,6 +198,108 @@
   <div class="row mx-auto index-card">
     
     
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/Algorithm/String/KMP/">KMP算法讲解</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/Algorithm/String/KMP/">
+          
+          
+            
+          
+          KMP是一个十分常用的字符串匹配算法
+#include &lt;bits/stdc++.h>
+using namespace std;
+
+string s,t;
+vector&lt;int> nextval;
+void getNextval() &#123;
+	int i = 0, j = -1;
+	nextval.resize(t.size() + 1);
+	nextval[0] = -1;
+	
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-10 14:57" pubdate>
+              2021-04-10
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Algorithm/">Algorithm</a>
+            
+              <a href="/categories/Algorithm/String/">String</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+              <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">字符串</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/uncategorized/sth-about-electron-vue/">sth-about-electron-vue</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/uncategorized/sth-about-electron-vue/">
+          
+          
+            
+          
+          Html Webpack Plugin错误
+
+Solution:
+将.electron-vue/webpack.web.config.js和electron-vue/webpack.renderer.config.js的plugins下HtmlWebpackPlugin改成：
+new HtmlWebpackPlugin(&#123;
+  filename: 'index.html',
+  temp
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-02 21:24" pubdate>
+              2021-04-02
+            </time>
+          </div>
+        
+        
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
       <div class="col-12 col-md-4 m-auto index-img">
         <a href="/School/Biology/ecosystem/" target="_self">
           <img src="https://cdn.jsdelivr.net/gh/ai1379/ai1379.github.io@master/School/Biology/ecosystem/index.jfif" srcset="https://cdn.jsdelivr.net/gh/ai1379/ai1379.github.io@master/img/loading.gif" alt="初中科学生态系统相关知识点">
@@ -591,112 +693,6 @@ WorkingDirectory&#x
               <a href="/tags/%E9%A2%98%E8%A7%A3/">题解</a>
             
               <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/WordPress/wp-caps/">WordPress权限设置</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/WordPress/wp-caps/">
-          
-          
-            
-          
-          
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-08-23 22:30" pubdate>
-              2020-08-23
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/WordPress/">WordPress</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/WordPress/">WordPress</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/WordPress/set-wordpress-display-name/">批量设置WordPress公开显示用户名</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/WordPress/set-wordpress-display-name/">
-          
-          
-            
-          
-          
-虽然我这个站不是用wp搭的，但是我还有另外一个wp的站，记录在此
-
-首先我们知道WordPress中每个用户都有用户名和昵称两个名字，而相对应的也会有一个显示名称的选项，默认应该是用户名。这个时候如果我们要批量修改为昵称的话可以这样操作：
-
-进入WordPress的数据库后台，注意不是网站后台
-然后运行这段代码：
-
-UPDATE
-    &#96;wp_users&#96;
-INNER JOIN
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-08-23 20:46" pubdate>
-              2020-08-23
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/WordPress/">WordPress</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/WordPress/">WordPress</a>
             
           </div>
         

@@ -214,7 +214,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      755 字
+      857 字
     </span>
   
 
@@ -224,7 +224,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
+      9
        分钟
     </span>
   
@@ -270,13 +270,26 @@
             
               <p class="note note-info">
                 
-                  本文最后更新于：1 天前
+                  本文最后更新于：1 分钟前
                 
               </p>
             
             <div class="markdown-body">
               <p>马上中考完了之后打算做的事情以及相关的一些想法都写在下面了</p>
 <span id="more"></span>
+<h1 id="这个博客站"><a href="#这个博客站" class="headerlink" title="这个博客站"></a>这个博客站</h1><p>这个博客站（以及另一个站<a href="&quot;https://cn.arendelleodyssey.com/&quot;">AOCN</a>）有好多博文原本打算写到现在还没写。这里先列个表记录一下。</p>
+<div>
+            <input type="checkbox" disabled>翻墙基本指南
+          </div>
+<div>
+            <input type="checkbox" disabled>KMP算法讲解
+          </div>
+<div>
+            <input type="checkbox" disabled>最短路算法解析
+          </div>
+<div>
+            <input type="checkbox" disabled>jQuery笔记
+          </div>
 <h1 id="FroztaleQQBot"><a href="#FroztaleQQBot" class="headerlink" title="FroztaleQQBot"></a>FroztaleQQBot</h1><p>这是一个C++写的QQ机器人 基于Mirai和mirai-cpp。也许会用Qt Core来做。目前看来没这个必要。</p>
 <p>有几点构思大概这样</p>
 <h2 id="插件系统"><a href="#插件系统" class="headerlink" title="插件系统"></a>插件系统</h2><p>每个插件作为一个DLL动态加载，最终目标想着参照Qv2ray，有空的时候翻翻Qv2ray的代码做参考。</p>
@@ -285,13 +298,14 @@
 <h2 id="指令系统"><a href="#指令系统" class="headerlink" title="指令系统"></a>指令系统</h2><p>这里指的是群消息指令。</p>
 <p>目前的思路是对于每一条群消息都先匹配一下有没有包括指令前缀，有的话作为一个指令发出一个事件，没有则跳过。这种做法在群比较多的情况下效率会很低，但是似乎并没有办法优化。</p>
 <p>当接收到指令的时候创建一个事件对象，其中应该包括指令名称及其参数。为了方便这里的参数打算使用mirai-cpp所提供的<code>Cyan::iMassage</code>抽象类的子类所构成的一个<code>std::vector</code>来存储。但这里有一个问题是这些东西并不是同一个类型的变量，因此打算使用指针来存，实在不行也可以用<code>std::any</code>。</p>
-<h1 id="一个跨平台的QQ客户端"><a href="#一个跨平台的QQ客户端" class="headerlink" title="一个跨平台的QQ客户端"></a>一个跨平台的QQ客户端</h1><p>打算用electron或者Qt来做。用Qt的好处是可以直接复用FroztaleQQBot的代码，坏处在于有些地方太丑，相比之下Electron的颜值更能让我满意，但是坏处就是得要重新把C++的代码翻译成TypeScript。</p>
+<h1 id="Neutron"><a href="#Neutron" class="headerlink" title="Neutron"></a>Neutron</h1><p>一个跨平台的第三方QQ客户端</p>
+<p>打算用electron或者Qt来做。用Qt的好处是可以直接复用FroztaleQQBot的代码，坏处在于有些地方太丑，相比之下Electron的颜值更能让我满意，但是坏处就是得要重新把C++的代码翻译成TypeScript。</p>
 <p>也许可以用C++做一个Node.js库来加载原有的一些DLL来复用。或者也可以在FroztaleBot里实现http api来实现。</p>
 <h1 id="EAer’s-Pub"><a href="#EAer’s-Pub" class="headerlink" title="EAer’s Pub"></a>EAer’s Pub</h1><blockquote>
 <p>就是原来的EALibrary</p>
 </blockquote>
 <p>这个东西暑假必须重新开张。</p>
-<p>两个方案：沿袭原来的WordPress / 用Express或Nest.js重新写</p>
+<p>三个方案：沿袭原来的WordPress / 用Express或Nest.js重新写 / Cpp+Vue</p>
 <h2 id="WordPress方案"><a href="#WordPress方案" class="headerlink" title="WordPress方案"></a>WordPress方案</h2><p>优点：</p>
 <ol>
 <li>较为成熟 可能比纯自建要稳一些 有些安全问题也很好解决</li>
@@ -313,6 +327,8 @@
 <li>费时费力 不一定能快速重建</li>
 <li>有些问题不方便及时解决</li>
 </ol>
+<h2 id="C-方案"><a href="#C-方案" class="headerlink" title="C++方案"></a>C++方案</h2><p>用libevent/boost::asio+MySQL做后端，Vue做前端</p>
+<p>优点在于C++更熟悉 缺点是开发效率低下</p>
 
             </div>
             <hr>
