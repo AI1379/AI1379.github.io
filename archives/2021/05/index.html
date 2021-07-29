@@ -20,35 +20,9 @@
   <meta name="author" content="Listener1379">
   <meta name="keywords" content="">
   
-  <title>在后台运行MCL - Listener 1379&#39;s Blog</title>
+  <title>归档 - Listener 1379&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
-
-
-  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
-  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
-
-  
-    
-    
-      
-      
-        
-          
-          
-          
-        
-        <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/themes/prism-tomorrow.min.css" />
-      
-      
-        <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.22.0/plugins/line-numbers/prism-line-numbers.min.css" />
-      
-    
-  
-
-  
-    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
-  
 
 
 
@@ -81,7 +55,7 @@
 
 
 <body>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 90vh;">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><header style="height: 100vh;">
     <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand"
@@ -187,59 +161,14 @@
 </nav>
 
     <div class="banner" id="banner" parallax=true
-         style="background: url('/img/post.jpg') no-repeat center center;
+         style="background: url('/img/archive.jpg') no-repeat center center;
            background-size: cover;">
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="在后台运行MCL">
+            <span class="h2" id="subtitle" title="归档">
               
             </span>
-
-            
-              <div class="mt-3">
-  
-  
-    <span class="post-meta">
-      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-03-19 17:15" pubdate>
-        2021年3月19日 下午
-      </time>
-    </span>
-  
-</div>
-
-<div class="mt-1">
-  
-    
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-chart"></i>
-      110 字
-    </span>
-  
-
-  
-    
-    <span class="post-meta mr-2">
-      <i class="iconfont icon-clock-fill"></i>
-      
-      
-      1
-       分钟
-    </span>
-  
-
-  
-  
-    
-      <!-- 不蒜子统计文章PV -->
-      <span id="busuanzi_container_page_pv" style="display: none">
-        <i class="iconfont icon-eye" aria-hidden="true"></i>
-        <span id="busuanzi_value_page_pv"></span> 次
-      </span>
-    
-  
-</div>
 
             
           </div>
@@ -256,146 +185,40 @@
 
   <main>
     
+      <div class="container nopadding-x-md">
+        <div class="py-5" id="board"
+          style=margin-top:0>
+          
+          <div class="container">
+            <div class="row">
+              <div class="col-12 col-md-10 m-auto">
+                
+
+<div class="list-group">
+  <p class="h4">共计 21 篇文章</p>
+  <hr>
+  
+  
+    
       
+      <p class="h5">2021</p>
+    
+    <a href="/uncategorized/eightnums/" class="list-group-item list-group-item-action">
+      <span class="archive-post-title">eightnums</span>
+      <time style="float: right;">05-29</time>
+    </a>
+  
+</div>
 
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="d-none d-lg-block col-lg-2"></div>
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div class="py-5" id="board">
-          <article class="post-content mx-auto">
-            <!-- SEO header -->
-            <h1 style="display: none">在后台运行MCL</h1>
-            
-              <p class="note note-info">
-                
-                  本文最后更新于：4 个月前
-                
-              </p>
-            
-            <div class="markdown-body">
-              <p>这几天在做一个QQ机器人，用的是<a target="_blank" rel="noopener" href="https://github.com/mamoe/mirai">Mirai</a>和<a target="_blank" rel="noopener" href="https://github.com/cyanray/mirai-cpp">mirai-cpp</a>，需要在后台部署Mirai Console，然而主流的screen方案在我的Linux服务器上不知为何行不通，所以写了一个service</p>
-<div class="code-wrapper"><pre class="line-numbers language-text" data-language="text"><code class="language-text">[Unit]
-Description&#x3D;Mirai Console Loader Systemd
 
-[Service]
-Type&#x3D;simple
-WorkingDirectory&#x3D;&lt;这里写mcl目录 一定要绝对目录&gt;
-ExecStart&#x3D;&lt;这里写运行的文件位置&gt;
 
-[Install]
-Alias&#x3D;Mirai.service<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></div>
-<p>放到<code>/usr/lib/systemd/system</code>即可。</p>
 
-            </div>
-            <hr>
-            <div>
-              <div class="post-metas mb-3">
-                
-                  <div class="post-meta mr-3">
-                    <i class="iconfont icon-category"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/Mirai/">Mirai</a>
-                    
-                  </div>
-                
-                
-                  <div class="post-meta">
-                    <i class="iconfont icon-tags"></i>
-                    
-                      <a class="hover-with-bg" href="/tags/Mirai/">Mirai</a>
-                    
-                  </div>
-                
+
               </div>
-              
-                <p class="note note-warning">
-                  
-                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
-                  
-                </p>
-              
-              
-                <div class="post-prevnext">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/Plans/plan/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">有关一些技术活的计划</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/Algorithm/Others/sort/">
-                        <span class="hidden-mobile">有关各种排序</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
             </div>
-
-            
-              <!-- Comments -->
-              <article class="comments" id="comments">
-                
-                  
-                
-                
-  <div id="vcomments"></div>
-  <script type="text/javascript">
-    Fluid.utils.waitElementVisible('vcomments', function() {
-      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
-        new Valine({
-          el: "#vcomments",
-          app_id: "daFP3gpJrLX9NWoNAGQyKgeK-gzGzoHsz",
-          app_key: "u48q2JQx16KrqQGwqboPRD0O",
-          placeholder: "说点什么",
-          path: window.location.pathname,
-          avatar: "retro",
-          meta: ["nick","mail","link"],
-          pageSize: "10",
-          lang: "zh-CN",
-          highlight: true,
-          recordIP: false,
-          serverURLs: "https://dafp3gpj.lc-cn-n1-shared.com",
-        });
-      });
-    });
-  </script>
-  <noscript>Please enable JavaScript to view the
-    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
-  </noscript>
-
-
-              </article>
-            
-          </article>
+          </div>
         </div>
       </div>
-    </div>
-    
-      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
-        <div id="toc">
-  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-      </div>
-    
-  </div>
-</div>
-
-<!-- Custom -->
-
-
     
 
     
@@ -501,15 +324,9 @@ Alias&#x3D;Mirai.service<span aria-hidden="true" class="line-numbers-rows"><span
 
 
 
-  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
 
 
 
-  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
-
-
-
-  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
 
 
 
