@@ -475,7 +475,9 @@ dis_{u,v}=\min\{dis_{u,k}+dis_{k,v}\}</script><p>它的思想很简单：选取�
 <p><strong>为什么每条边同时加上一个值会使得最短路改变？</strong></p>
 <p>假设每条边的权值加上了k，那么对于包含了两条边的路径，总的权值加上了2k，而对于包含了三条边的路径总权值则增加了3k，以此类推。这就导致了最短路结果的变化。</p>
 </blockquote>
-<p>Johnson算法结合了Bellman-Ford和Dijkstra算法首先添加了一个虚拟点标记为0，从这个点向每个点连一条权值为0的边，从这个点开始跑Bellman-Ford，记此时每个点$v$的最短路为 $h<em>v$ ，然后更新每条边的边权：$w</em>{u,v}=w<em>{u,v}+h_u-h_v$。这个时候每条边的长度都是正的。然后从每个点开始跑Dijkstra得到全源最短路。需要注意的是这个时候的$dis’</em>{u,v}$并不是原图的$dis<em>{u,v}$，而是$dis</em>{u,v}+h_u-h_v$，因此需要最后减去$h_u-h_v$​得到最终的答案。</p>
+<p>Johnson算法结合了Bellman-Ford和Dijkstra算法。首先添加了一个虚拟点标记为0，从这个点向每个点连一条权值为0的边，从这个点开始跑Bellman-Ford，记此时每个点$v$​​​的最短路是 $h_{v}$​​ ，然后更新每条边的边权：</p>
+<script type="math/tex; mode=display">
+w_{u,v}=w_{u,v}+h_u-h_v</script><p>这个时候每条边的长度都是正的。然后从每个点开始跑Dijkstra得到全源最短路。需要注意的是这个时候的$dis’<em>{u,v}$​​​并不是原图的$dis</em>{u,v}$​​​，而是$dis_{u,v}+h_u-h_v$​​​，因此需要最后减去 $h_u-h_v$​​​​​​​​​​得到最终的答案。</p>
 <p>代码如下：</p>
 <div class="code-wrapper"><pre class="line-numbers language-cpp" data-language="cpp"><code class="language-cpp"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;bits/stdc++.h></span></span>
 <span class="token keyword">using</span> <span class="token keyword">namespace</span> std<span class="token punctuation">;</span>
